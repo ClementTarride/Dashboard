@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Widgets - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard_widgets.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text">
+                <h1>Data Platform</h1>
+                <p>Espace de gestion et de visualisation</p>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link">Sources</a>
+            <a href="/tables" class="nav-link">Tables</a>
+            <a href="#" class="nav-link">SQL</a>
+            <a href="/dasboard" class="nav-link active">Dashboard</a>
+        </nav>
+
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" placeholder="Rechercher..." />
+                <button type="submit">Rechercher</button>
+            </form>
+
+            <a href="#" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section class="hero">
+            <div class="hero-left">
+                <span class="eyebrow">Dashboard Workspace</span>
+                <h2>Performance Commerciale</h2>
+                <p>
+                    Dashboard dédié au suivi de l’activité commerciale, des KPI de conversion,
+                    de la performance des équipes et de l’évolution du chiffre d’affaires.
+                    Cette page permet de gérer les widgets affichés dans le dashboard.
+                </p>
+
+                <div class="hero-actions">
+                    <button type="button" class="primary-btn open-widget-modal">
+                        Ajouter un widget
+                    </button>
+                    <a href="#" class="secondary-btn">Prévisualiser le dashboard</a>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-stat-card">
+                    <span class="stat-label">Source associée</span>
+                    <strong class="stat-value">PostgreSQL Production</strong>
+                </div>
+                <div class="hero-stat-card">
+                    <span class="stat-label">Widgets actifs</span>
+                    <strong class="stat-value">4</strong>
+                </div>
+                <div class="hero-stat-card">
+                    <span class="stat-label">Statut</span>
+                    <strong class="stat-value">Actif</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="toolbar">
+            <div class="toolbar-left">
+                <span class="toolbar-title">Organisation des widgets</span>
+                <span class="toolbar-subtitle">Empilement vertical, configuration individuelle et aperçu visuel</span>
+            </div>
+
+            <div class="toolbar-right">
+                <button type="button" class="toolbar-btn open-widget-modal">Nouveau widget</button>
+            </div>
+        </section>
+
+        <section class="widgets-stack">
+            <article class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-header-left">
+                        <span class="widget-badge">KPI</span>
+                        <div>
+                            <h3>Chiffre d’affaires mensuel</h3>
+                            <p>Indicateur synthétique calculé à partir des ventes consolidées.</p>
+                        </div>
+                    </div>
+
+                    <div class="widget-header-right">
+                        <button class="icon-action-btn">Dupliquer</button>
+                        <button class="icon-action-btn open-widget-modal">Paramétrer</button>
+                        <button class="icon-action-btn danger-btn">Supprimer</button>
+                    </div>
+                </div>
+
+                <div class="widget-tools">
+                    <div class="widget-search">
+                        <input type="text" placeholder="Rechercher dans ce widget..." />
+                    </div>
+                    <div class="widget-meta">
+                        <span>Type : KPI</span>
+                        <span>Requête : sales_revenue_month.sql</span>
+                        <span>Dernière mise à jour : il y a 15 min</span>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="kpi-preview-grid">
+                        <div class="kpi-box">
+                            <span class="kpi-label">Valeur</span>
+                            <strong class="kpi-value">€ 248 900</strong>
+                            <span class="kpi-trend positive">+12.4%</span>
+                        </div>
+                        <div class="kpi-box soft">
+                            <span class="kpi-label">Objectif</span>
+                            <strong class="kpi-value">€ 220 000</strong>
+                            <span class="kpi-trend neutral">Mensuel</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-header-left">
+                        <span class="widget-badge chart-badge">Graphique</span>
+                        <div>
+                            <h3>Évolution des ventes</h3>
+                            <p>Courbe d’évolution du chiffre d’affaires et du nombre de commandes.</p>
+                        </div>
+                    </div>
+
+                    <div class="widget-header-right">
+                        <button class="icon-action-btn">Dupliquer</button>
+                        <button class="icon-action-btn open-widget-modal">Paramétrer</button>
+                        <button class="icon-action-btn danger-btn">Supprimer</button>
+                    </div>
+                </div>
+
+                <div class="widget-tools">
+                    <div class="widget-search">
+                        <input type="text" placeholder="Rechercher dans ce widget..." />
+                    </div>
+                    <div class="widget-meta">
+                        <span>Type : Graphique</span>
+                        <span>Requête : sales_evolution.sql</span>
+                        <span>Dernière mise à jour : il y a 10 min</span>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="chart-preview">
+                        <div class="chart-grid-line"></div>
+                        <div class="chart-grid-line"></div>
+                        <div class="chart-grid-line"></div>
+                        <div class="chart-line chart-line-one"></div>
+                        <div class="chart-line chart-line-two"></div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-header-left">
+                        <span class="widget-badge table-badge">Tableau</span>
+                        <div>
+                            <h3>Top comptes clients</h3>
+                            <p>Vue tabulaire détaillée des comptes les plus performants.</p>
+                        </div>
+                    </div>
+
+                    <div class="widget-header-right">
+                        <button class="icon-action-btn">Exporter</button>
+                        <button class="icon-action-btn open-widget-modal">Paramétrer</button>
+                        <button class="icon-action-btn danger-btn">Supprimer</button>
+                    </div>
+                </div>
+
+                <div class="widget-tools">
+                    <div class="widget-search">
+                        <input type="text" placeholder="Rechercher dans ce widget..." />
+                    </div>
+                    <div class="widget-meta">
+                        <span>Type : Tableau Excel-like</span>
+                        <span>Requête : top_clients.sql</span>
+                        <span>Dernière mise à jour : il y a 4 min</span>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="table-preview">
+                        <div class="table-row header-row">
+                            <span>Client</span>
+                            <span>CA</span>
+                            <span>Commandes</span>
+                            <span>Région</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Acme Corp</span>
+                            <span>€ 42 000</span>
+                            <span>19</span>
+                            <span>France</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Nova Retail</span>
+                            <span>€ 37 500</span>
+                            <span>15</span>
+                            <span>Belgique</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Blue Industries</span>
+                            <span>€ 29 800</span>
+                            <span>11</span>
+                            <span>Suisse</span>
+                        </div>
+                        <div class="table-row">
+                            <span>Urban Trade</span>
+                            <span>€ 21 400</span>
+                            <span>9</span>
+                            <span>France</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="widget-card">
+                <div class="widget-header">
+                    <div class="widget-header-left">
+                        <span class="widget-badge map-badge">Carte</span>
+                        <div>
+                            <h3>Répartition géographique</h3>
+                            <p>Répartition des ventes et activités par zone géographique.</p>
+                        </div>
+                    </div>
+
+                    <div class="widget-header-right">
+                        <button class="icon-action-btn">Filtrer</button>
+                        <button class="icon-action-btn open-widget-modal">Paramétrer</button>
+                        <button class="icon-action-btn danger-btn">Supprimer</button>
+                    </div>
+                </div>
+
+                <div class="widget-tools">
+                    <div class="widget-search">
+                        <input type="text" placeholder="Rechercher dans ce widget..." />
+                    </div>
+                    <div class="widget-meta">
+                        <span>Type : Carte</span>
+                        <span>Requête : sales_geo_distribution.sql</span>
+                        <span>Dernière mise à jour : il y a 25 min</span>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="map-preview">
+                        <div class="map-shape"></div>
+                        <span class="map-dot dot-1"></span>
+                        <span class="map-dot dot-2"></span>
+                        <span class="map-dot dot-3"></span>
+                        <span class="map-dot dot-4"></span>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="widgetModal">
+        <div class="modal-panel">
+            <div class="modal-header">
+                <div>
+                    <p class="section-kicker">Configuration</p>
+                    <h3 class="section-title">Paramétrer un widget</h3>
+                </div>
+                <button class="close-modal-btn" id="closeWidgetModal">&times;</button>
+            </div>
+
+            <form class="widget-form" action="#" method="post">
+                <div class="modal-grid">
+                    <div class="input-group full-width">
+                        <label for="widget-name">Nom du widget</label>
+                        <input
+                            type="text"
+                            id="widget-name"
+                            name="widget_name"
+                            placeholder="Ex : Évolution des ventes"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="widget-type">Type de widget</label>
+                        <select id="widget-type" name="widget_type" required>
+                            <option value="">Sélectionner</option>
+                            <option value="kpi">KPI</option>
+                            <option value="chart">Graphique</option>
+                            <option value="table">Tableau</option>
+                            <option value="map">Carte</option>
+                            <option value="image">Image</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="widget-size">Taille / largeur</label>
+                        <select id="widget-size" name="widget_size">
+                            <option value="full">Pleine largeur</option>
+                            <option value="half">Demi largeur</option>
+                            <option value="third">Un tiers</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label for="widget-sql">Requête SQL</label>
+                        <textarea
+                            id="widget-sql"
+                            name="widget_sql"
+                            rows="8"
+                            placeholder="SELECT * FROM ..."
+                        ></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="widget-title-field">Titre affiché</label>
+                        <input
+                            type="text"
+                            id="widget-title-field"
+                            name="widget_title_field"
+                            placeholder="Titre visible dans le dashboard"
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="widget-refresh">Rafraîchissement</label>
+                        <select id="widget-refresh" name="widget_refresh">
+                            <option value="manual">Manuel</option>
+                            <option value="5min">Toutes les 5 min</option>
+                            <option value="15min">Toutes les 15 min</option>
+                            <option value="hourly">Toutes les heures</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label for="widget-description">Description</label>
+                        <textarea
+                            id="widget-description"
+                            name="widget_description"
+                            rows="4"
+                            placeholder="Description fonctionnelle du widget"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn">Tester la requête</button>
+                    <button type="submit" class="primary-btn">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='js/dashboard_widgets.js') }}"></script>
+</body>
+</html>

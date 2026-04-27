@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text"><h1>Data Platform</h1><p>Espace de gestion et de visualisation</p></div>
+        </div>
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link ">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link ">Sources</a>
+            <a href="/tables" class="nav-link ">Tables</a>
+            <a href="#" class="nav-link ">SQL</a>
+            <a href="/dashboard" class="nav-link ">Dashboard</a>
+            <a href="/users" class="nav-link ">Utilisateurs</a>
+            <a href="/teams" class="nav-link ">Équipes</a>
+            <a href="/profile" class="nav-link active">Profil</a>
+        </nav>
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" data-admin-search placeholder="Rechercher une notification..." />
+                <button type="submit">Rechercher</button>
+            </form>
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+    <main class="page-content">
+        <section class="hero"><div class="hero-left"><span class="eyebrow">Notifications</span><h2>Suivez les alertes importantes de la plateforme</h2><p>Échecs de refresh, partages, invitations, changements de droits et tests de connexions sont regroupés ici.</p><div class="hero-actions"><button class="primary-btn">Tout marquer comme lu</button><a href="/profile" class="secondary-btn">Préférences</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Non lues</span><strong class="stat-value">5</strong></div><div class="hero-stat-card"><span class="stat-label">Critiques</span><strong class="stat-value">2</strong></div><div class="hero-stat-card"><span class="stat-label">Aujourd’hui</span><strong class="stat-value">9</strong></div></div></section>
+        <section class="form-card"><h3>Centre de notifications</h3><div class="notification-list" style="margin-top:18px"><div class="list-item" data-search-card="refresh erreur finance"><strong>Refresh échoué · Finance Monitor</strong><p>La requête principale a dépassé le timeout configuré. Vérifiez la source PostgreSQL Finance.</p></div><div class="list-item" data-search-card="partage dashboard direction"><strong>Nouveau partage · Executive Overview</strong><p>Le dashboard a été partagé avec l’équipe Direction en lecture.</p></div><div class="list-item" data-search-card="invitation emma"><strong>Invitation en attente</strong><p>Emma Durand n’a pas encore accepté son invitation.</p></div></div></section>
+    </main>
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+</body>
+</html>

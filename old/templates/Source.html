@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sources - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/Source.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text">
+                <h1>Data Platform</h1>
+                <p>Espace de gestion et de visualisation</p>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link">Accueil</a>
+            <a href="/model" class="nav-link">Model</a>
+            <a href="/source" class="nav-link active">Sources</a>
+            <a href="/tables" class="nav-link">Tables</a>
+            <a href="#" class="nav-link">SQL</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+        </nav>
+
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input
+                    type="text"
+                    id="sourceSearch"
+                    placeholder="Rechercher une source, un host, un type..."
+                />
+                <button type="submit">Rechercher</button>
+            </form>
+
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section class="hero">
+            <div class="hero-left">
+                <span class="eyebrow">Source Management</span>
+                <h2>Gérez vos connexions aux bases de données depuis un espace centralisé</h2>
+                <p>
+                    Retrouvez toutes les sources déjà configurées, consultez leur état,
+                    modifiez leurs paramètres ou ouvrez une documentation contextuelle.
+                    Comme sur la page des tables, l’ouverture se fait maintenant via
+                    une vue dédiée en <code>&lt;article&gt;</code> quand vous cliquez sur les boutons.
+                </p>
+
+                <div class="hero-actions">
+                    <button class="primary-btn" id="addSourceBtn" type="button">Ajouter une source</button>
+                    <button class="secondary-btn" id="openDocumentationBtn" type="button">Voir la documentation</button>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-stat-card">
+                    <span class="stat-label">Sources enregistrées</span>
+                    <strong class="stat-value">8</strong>
+                </div>
+
+                <div class="hero-stat-card">
+                    <span class="stat-label">Connexions actives</span>
+                    <strong class="stat-value">6</strong>
+                </div>
+
+                <div class="hero-stat-card">
+                    <span class="stat-label">Dernière synchronisation</span>
+                    <strong class="stat-value">Il y a 12 min</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="filters-bar">
+            <div class="filters-left">
+                <button class="filter-chip active" data-filter="all" type="button">Toutes</button>
+                <button class="filter-chip" data-filter="postgresql" type="button">PostgreSQL</button>
+                <button class="filter-chip" data-filter="mysql" type="button">MySQL</button>
+                <button class="filter-chip" data-filter="sqlserver" type="button">SQL Server</button>
+                <button class="filter-chip" data-filter="active" type="button">Actives</button>
+                <button class="filter-chip" data-filter="warning" type="button">À vérifier</button>
+            </div>
+
+            <div class="filters-right">
+                <select class="sort-select">
+                    <option value="recent">Trier par : récent</option>
+                    <option value="name">Trier par : nom</option>
+                    <option value="status">Trier par : statut</option>
+                    <option value="type">Trier par : type</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="sources-section">
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker">Catalogue technique</p>
+                    <h3 class="section-title">Sources configurées</h3>
+                </div>
+                <a href="#" class="section-link">Historique des connexions</a>
+            </div>
+
+            <div class="source-grid" id="sourceGrid">
+                <article
+                    class="source-card"
+                    data-name="PostgreSQL Production"
+                    data-type="postgresql"
+                    data-engine-label="PostgreSQL"
+                    data-environment="Production"
+                    data-status="active"
+                    data-status-label="Active"
+                    data-description="Base principale de production utilisée pour les données applicatives et les analyses métier."
+                    data-host="prod-db.company.local"
+                    data-port="5432"
+                    data-database="production"
+                    data-schema="public"
+                    data-username="svc_production_reader"
+                    data-ssl="required"
+                    data-timeout="15"
+                    data-last-test="Il y a 5 min"
+                    data-doc-title="Documentation PostgreSQL Production"
+                    data-doc-summary="Cette source alimente les usages opérationnels critiques. Toute modification doit être testée avant déploiement."
+                    data-doc-points='["Valider l’accès réseau depuis l’environnement d’exécution.","Utiliser le compte de service dédié à la lecture.","Confirmer le schéma par défaut avant la sauvegarde."]'
+                >
+                    <div class="card-top">
+                        <div class="card-top-left">
+                            <span class="card-badge">PostgreSQL</span>
+                            <span class="card-status online">Active</span>
+                        </div>
+                        <button class="icon-btn" title="Options" type="button">•••</button>
+                    </div>
+
+                    <h4>PostgreSQL Production</h4>
+                    <p class="card-description">
+                        Base principale de production utilisée pour les données
+                        applicatives et les analyses métier.
+                    </p>
+
+                    <div class="card-info-list">
+                        <div class="info-row">
+                            <span class="info-label">Host</span>
+                            <span class="info-value">prod-db.company.local</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Port</span>
+                            <span class="info-value">5432</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Base</span>
+                            <span class="info-value">production</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Dernier test</span>
+                            <span class="info-value">Il y a 5 min</span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="card-link edit-source-btn" type="button">Modifier</button>
+                        <button class="card-link ghost view-doc-btn" type="button">Documentation</button>
+                        <button class="danger-link" type="button">Supprimer</button>
+                    </div>
+                </article>
+
+                <article
+                    class="source-card"
+                    data-name="MySQL CRM"
+                    data-type="mysql"
+                    data-engine-label="MySQL"
+                    data-environment="CRM"
+                    data-status="active"
+                    data-status-label="Active"
+                    data-description="Source dédiée aux données CRM, contacts, opportunités et interactions commerciales."
+                    data-host="crm-db.internal"
+                    data-port="3306"
+                    data-database="crm_main"
+                    data-schema="crm"
+                    data-username="svc_crm_reader"
+                    data-ssl="preferred"
+                    data-timeout="20"
+                    data-last-test="Il y a 18 min"
+                    data-doc-title="Documentation MySQL CRM"
+                    data-doc-summary="Connexion métier exposant les données commerciales, contacts et opportunités."
+                    data-doc-points='["Contrôler les droits sur les vues CRM.","Vérifier le timeout pour les requêtes longues.","Documenter le schéma fonctionnel utilisé par défaut."]'
+                >
+                    <div class="card-top">
+                        <div class="card-top-left">
+                            <span class="card-badge mysql-badge">MySQL</span>
+                            <span class="card-status online">Active</span>
+                        </div>
+                        <button class="icon-btn" title="Options" type="button">•••</button>
+                    </div>
+
+                    <h4>MySQL CRM</h4>
+                    <p class="card-description">
+                        Source dédiée aux données CRM, contacts, opportunités
+                        et interactions commerciales.
+                    </p>
+
+                    <div class="card-info-list">
+                        <div class="info-row">
+                            <span class="info-label">Host</span>
+                            <span class="info-value">crm-db.internal</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Port</span>
+                            <span class="info-value">3306</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Base</span>
+                            <span class="info-value">crm_main</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Dernier test</span>
+                            <span class="info-value">Il y a 18 min</span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="card-link edit-source-btn" type="button">Modifier</button>
+                        <button class="card-link ghost view-doc-btn" type="button">Documentation</button>
+                        <button class="danger-link" type="button">Supprimer</button>
+                    </div>
+                </article>
+
+                <article
+                    class="source-card"
+                    data-name="SQL Server Finance"
+                    data-type="sqlserver"
+                    data-engine-label="SQL Server"
+                    data-environment="Finance"
+                    data-status="warning"
+                    data-status-label="À vérifier"
+                    data-description="Connexion utilisée pour les rapports financiers et les extractions comptables consolidées."
+                    data-host="finance-sql.company.local"
+                    data-port="1433"
+                    data-database="finance_reporting"
+                    data-schema="dbo"
+                    data-username="svc_finance_reader"
+                    data-ssl="required"
+                    data-timeout="25"
+                    data-last-test="Il y a 42 min"
+                    data-doc-title="Documentation SQL Server Finance"
+                    data-doc-summary="Cette source requiert une vigilance particulière sur les accès et les fenêtres de maintenance."
+                    data-doc-points='["Confirmer la disponibilité du serveur avant modification.","Tester les accès sur le schéma dbo.","Prévenir l’équipe finance en cas de changement de paramètres."]'
+                >
+                    <div class="card-top">
+                        <div class="card-top-left">
+                            <span class="card-badge sqlserver-badge">SQL Server</span>
+                            <span class="card-status maintenance">À vérifier</span>
+                        </div>
+                        <button class="icon-btn" title="Options" type="button">•••</button>
+                    </div>
+
+                    <h4>SQL Server Finance</h4>
+                    <p class="card-description">
+                        Connexion utilisée pour les rapports financiers et les
+                        extractions comptables consolidées.
+                    </p>
+
+                    <div class="card-info-list">
+                        <div class="info-row">
+                            <span class="info-label">Host</span>
+                            <span class="info-value">finance-sql.company.local</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Port</span>
+                            <span class="info-value">1433</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Base</span>
+                            <span class="info-value">finance_reporting</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Dernier test</span>
+                            <span class="info-value">Il y a 42 min</span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="card-link edit-source-btn" type="button">Modifier</button>
+                        <button class="card-link ghost view-doc-btn" type="button">Documentation</button>
+                        <button class="danger-link" type="button">Supprimer</button>
+                    </div>
+                </article>
+
+                <article
+                    class="source-card"
+                    data-name="PostgreSQL Analytics"
+                    data-type="postgresql"
+                    data-engine-label="PostgreSQL"
+                    data-environment="Analytics"
+                    data-status="active"
+                    data-status-label="Active"
+                    data-description="Source optimisée pour les traitements analytiques, dashboards et datasets préparés."
+                    data-host="analytics-db.company.local"
+                    data-port="5432"
+                    data-database="analytics"
+                    data-schema="mart"
+                    data-username="svc_analytics_reader"
+                    data-ssl="required"
+                    data-timeout="30"
+                    data-last-test="Il y a 2 min"
+                    data-doc-title="Documentation PostgreSQL Analytics"
+                    data-doc-summary="Connexion orientée BI avec schémas analytiques et jeux de données préparés."
+                    data-doc-points='["Privilégier le schéma mart pour les usages BI.","Conserver un timeout plus long pour les agrégations.","Valider le périmètre des droits sur les vues analytiques."]'
+                >
+                    <div class="card-top">
+                        <div class="card-top-left">
+                            <span class="card-badge">PostgreSQL</span>
+                            <span class="card-status online">Active</span>
+                        </div>
+                        <button class="icon-btn" title="Options" type="button">•••</button>
+                    </div>
+
+                    <h4>PostgreSQL Analytics</h4>
+                    <p class="card-description">
+                        Source optimisée pour les traitements analytiques,
+                        dashboards et datasets préparés.
+                    </p>
+
+                    <div class="card-info-list">
+                        <div class="info-row">
+                            <span class="info-label">Host</span>
+                            <span class="info-value">analytics-db.company.local</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Port</span>
+                            <span class="info-value">5432</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Base</span>
+                            <span class="info-value">analytics</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Dernier test</span>
+                            <span class="info-value">Il y a 2 min</span>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="card-link edit-source-btn" type="button">Modifier</button>
+                        <button class="card-link ghost view-doc-btn" type="button">Documentation</button>
+                        <button class="danger-link" type="button">Supprimer</button>
+                    </div>
+                </article>
+
+                <article class="source-card add-source-card">
+                    <div class="add-source-content">
+                        <div class="add-icon">+</div>
+                        <h4>Ajouter une nouvelle source</h4>
+                        <p>
+                            Ouvrez le formulaire de configuration dédié et renseignez
+                            les paramètres de connexion dans un <code>&lt;article&gt;</code> dédié.
+                        </p>
+                        <button class="primary-btn compact-btn" id="addSourceCardBtn" type="button">Configurer une source</button>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="sourceModal" aria-hidden="true">
+        <div class="modal-shell docs-hidden" id="sourceModalShell">
+            <article class="modal-article source-editor-article">
+                <div class="modal-header">
+                    <div>
+                        <p class="section-kicker" id="modalKicker">Configuration</p>
+                        <h3 class="modal-title" id="modalTitle">Ajouter une source</h3>
+                        <p class="modal-subtitle" id="modalSubtitle">Configurez votre connexion.</p>
+                    </div>
+                    <button class="close-modal-btn" id="closeSourceModal" type="button">&times;</button>
+                </div>
+
+                <div class="source-status-bar">
+                    <span class="status-pill" id="modalStatusPill">Nouveau</span>
+                    <span class="status-text" id="modalStatusText">Prêt à configurer</span>
+                </div>
+
+                <form id="sourceForm" class="source-form">
+                    <div class="form-grid">
+                        <label class="form-field full-width">
+                            <span>Nom de la source</span>
+                            <input id="sourceNameInput" type="text" placeholder="Ex. PostgreSQL Production" required />
+                        </label>
+
+                        <label class="form-field">
+                            <span>Type de base</span>
+                            <select id="sourceTypeInput">
+                                <option value="postgresql">PostgreSQL</option>
+                                <option value="mysql">MySQL</option>
+                                <option value="sqlserver">SQL Server</option>
+                            </select>
+                        </label>
+
+                        <label class="form-field">
+                            <span>Schéma par défaut</span>
+                            <input id="sourceSchemaInput" type="text" placeholder="public" />
+                        </label>
+
+                        <label class="form-field full-width">
+                            <span>Description</span>
+                            <textarea id="sourceDescriptionInput" rows="4" placeholder="Décrivez le rôle de la source."></textarea>
+                        </label>
+
+                        <label class="form-field">
+                            <span>Host</span>
+                            <input id="sourceHostInput" type="text" placeholder="db.company.local" required />
+                        </label>
+
+                        <label class="form-field">
+                            <span>Port</span>
+                            <input id="sourcePortInput" type="number" placeholder="5432" required />
+                        </label>
+
+                        <label class="form-field">
+                            <span>Base</span>
+                            <input id="sourceDatabaseInput" type="text" placeholder="Nom de la base" required />
+                        </label>
+
+                        <label class="form-field">
+                            <span>Utilisateur</span>
+                            <input id="sourceUsernameInput" type="text" placeholder="service_reader" required />
+                        </label>
+
+                        <label class="form-field">
+                            <span>Mot de passe</span>
+                            <input id="sourcePasswordInput" type="password" placeholder="••••••••" />
+                        </label>
+
+                        <label class="form-field">
+                            <span>SSL</span>
+                            <select id="sourceSslInput">
+                                <option value="required">Required</option>
+                                <option value="preferred">Preferred</option>
+                                <option value="disabled">Disabled</option>
+                            </select>
+                        </label>
+
+                        <label class="form-field">
+                            <span>Timeout (s)</span>
+                            <input id="sourceTimeoutInput" type="number" placeholder="15" />
+                        </label>
+                    </div>
+
+                    <div class="editor-bottom-grid single-column-grid">
+                        <section class="preview-card">
+                            <div class="modal-section-header">
+                                <h4>Prévisualisation</h4>
+                                <div class="preview-actions">
+                                    <button type="button" class="neutral-link" id="testConnectionBtn">Tester la connexion</button>
+                                    <button type="button" class="neutral-link" id="toggleDocPanelBtn">Voir la documentation</button>
+                                </div>
+                            </div>
+                            <div class="preview-hero">
+                                <strong id="previewSourceName">Nouvelle source</strong>
+                                <span>Résumé live des paramètres saisis</span>
+                            </div>
+                            <div class="preview-list" id="previewList"></div>
+                        </section>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="secondary-btn" id="cancelSourceModal" type="button">Annuler</button>
+                        <button class="primary-btn" id="submitSourceBtn" type="submit">Enregistrer la source</button>
+                    </div>
+                </form>
+            </article>
+
+            <article class="modal-article documentation-side-article">
+                <div class="modal-header compact-header">
+                    <div>
+                        <p class="section-kicker">Documentation contextuelle</p>
+                        <h3 class="modal-title small-title" id="docPanelTitle">Aide à la configuration</h3>
+                    </div>
+                </div>
+                <p class="modal-description" id="docPanelSummary"></p>
+                <ul class="doc-points" id="docPanelList"></ul>
+            </article>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="documentationModal" aria-hidden="true">
+        <article class="modal-article documentation-modal-article">
+            <div class="modal-header">
+                <div>
+                    <p class="section-kicker">Documentation</p>
+                    <h3 class="modal-title" id="documentationModalTitle">Guide</h3>
+                    <p class="modal-subtitle" id="documentationModalSubtitle">Documentation de référence</p>
+                </div>
+                <button class="close-modal-btn" id="closeDocumentationModal" type="button">&times;</button>
+            </div>
+
+            <section class="doc-summary-card">
+                <h4 id="documentationCardTitle">Guide</h4>
+                <p class="modal-description" id="documentationCardSummary"></p>
+                <ul class="doc-points" id="documentationChecklist"></ul>
+            </section>
+        </article>
+    </div>
+
+    <script src="{{ url_for('static', path='js/Source.js') }}"></script>
+</body>
+</html>

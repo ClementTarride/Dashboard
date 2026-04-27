@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Partage - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text"><h1>Data Platform</h1><p>Espace de gestion et de visualisation</p></div>
+        </div>
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link ">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link ">Sources</a>
+            <a href="/tables" class="nav-link ">Tables</a>
+            <a href="#" class="nav-link ">SQL</a>
+            <a href="/dashboard" class="nav-link ">Dashboard</a>
+            <a href="/users" class="nav-link ">Utilisateurs</a>
+            <a href="/teams" class="nav-link active">Équipes</a>
+            <a href="/profile" class="nav-link ">Profil</a>
+        </nav>
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" data-admin-search placeholder="Rechercher un partage..." />
+                <button type="submit">Rechercher</button>
+            </form>
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+    <main class="page-content">
+        <section class="hero"><div class="hero-left"><span class="eyebrow">Sharing Center</span><h2>Partagez dashboards et sources sans perdre le contrôle</h2><p>Accordez des accès par utilisateur ou par équipe avec un niveau lecture, édition ou administration.</p><div class="hero-actions"><button class="primary-btn">Ajouter un partage</button><a href="/teams" class="secondary-btn">Voir les équipes</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Partages actifs</span><strong class="stat-value">31</strong></div><div class="hero-stat-card"><span class="stat-label">Liens publics</span><strong class="stat-value">0</strong></div><div class="hero-stat-card"><span class="stat-label">Accès à revoir</span><strong class="stat-value">3</strong></div></div></section>
+        <section><div class="section-header"><div><p class="section-kicker">Accès</p><h3 class="section-title">Permissions par ressource</h3></div></div><div class="table-card"><table class="data-table"><thead><tr><th>Ressource</th><th>Type</th><th>Bénéficiaire</th><th>Permission</th><th>Expiration</th><th>Action</th></tr></thead><tbody><tr data-search-row="executive overview direction"><td>Executive Overview</td><td>Dashboard</td><td>Équipe Direction</td><td><span class="status-pill success">Lecture</span></td><td>Aucune</td><td><a class="card-link ghost" href="#">Modifier</a></td></tr><tr data-search-row="finance monitor finance"><td>Finance Monitor</td><td>Dashboard</td><td>Équipe Finance</td><td><span class="status-pill warning">Édition</span></td><td>30 jours</td><td><a class="card-link ghost" href="#">Modifier</a></td></tr><tr data-search-row="warehouse data"><td>Warehouse PROD</td><td>Source</td><td>Data Engineering</td><td><span class="status-pill danger">Admin</span></td><td>Aucune</td><td><a class="card-link ghost" href="#">Modifier</a></td></tr></tbody></table></div></section>
+    </main>
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+</body>
+</html>

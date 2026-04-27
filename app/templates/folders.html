@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dossiers - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text"><h1>Data Platform</h1><p>Espace de gestion et de visualisation</p></div>
+        </div>
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link ">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link ">Sources</a>
+            <a href="/tables" class="nav-link ">Tables</a>
+            <a href="#" class="nav-link ">SQL</a>
+            <a href="/dashboard" class="nav-link active">Dashboard</a>
+            <a href="/users" class="nav-link ">Utilisateurs</a>
+            <a href="/teams" class="nav-link ">Équipes</a>
+            <a href="/profile" class="nav-link ">Profil</a>
+        </nav>
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" data-admin-search placeholder="Rechercher un dossier..." />
+                <button type="submit">Rechercher</button>
+            </form>
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+    <main class="page-content">
+        <section class="hero"><div class="hero-left"><span class="eyebrow">Collections</span><h2>Organisez les dashboards par dossiers, favoris et domaines</h2><p>Évitez les listes trop longues en regroupant les vues par équipe, usage ou niveau de confidentialité.</p><div class="hero-actions"><button class="primary-btn">Créer un dossier</button><a href="/dashboard" class="secondary-btn">Dashboards</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Dossiers</span><strong class="stat-value">7</strong></div><div class="hero-stat-card"><span class="stat-label">Favoris</span><strong class="stat-value">11</strong></div><div class="hero-stat-card"><span class="stat-label">Sans dossier</span><strong class="stat-value">3</strong></div></div></section>
+        <section><div class="card-grid"><article class="app-card" data-search-card="finance"><div class="card-top"><span class="card-badge">Finance</span><span class="status-pill success">4 dashboards</span></div><h4>Finance</h4><p>Budgets, marges, dépenses et rentabilité.</p><div class="card-footer"><a class="card-link" href="#">Ouvrir</a></div></article><article class="app-card" data-search-card="direction"><div class="card-top"><span class="card-badge">Direction</span><span class="status-pill success">5 dashboards</span></div><h4>Direction</h4><p>Vues exécutives et indicateurs stratégiques.</p><div class="card-footer"><a class="card-link" href="#">Ouvrir</a></div></article></div></section>
+    </main>
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+</body>
+</html>

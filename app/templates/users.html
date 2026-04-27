@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Utilisateurs - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text"><h1>Data Platform</h1><p>Espace de gestion et de visualisation</p></div>
+        </div>
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link ">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link ">Sources</a>
+            <a href="/tables" class="nav-link ">Tables</a>
+            <a href="#" class="nav-link ">SQL</a>
+            <a href="/dashboard" class="nav-link ">Dashboard</a>
+            <a href="/users" class="nav-link active">Utilisateurs</a>
+            <a href="/teams" class="nav-link ">Équipes</a>
+            <a href="/profile" class="nav-link ">Profil</a>
+        </nav>
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" data-admin-search placeholder="Rechercher un utilisateur..." />
+                <button type="submit">Rechercher</button>
+            </form>
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+    <main class="page-content">
+        <section class="hero">
+            <div class="hero-left">
+                <span class="eyebrow">User Center</span>
+                <h2>Gérez les comptes, rôles et accès de votre plateforme</h2>
+                <p>Centralisez les utilisateurs, surveillez leur statut et attribuez les bons niveaux d’accès aux dashboards, sources et modèles.</p>
+                <div class="hero-actions"><a href="/users/new" class="primary-btn">Inviter un utilisateur</a><a href="/roles" class="secondary-btn">Gérer les rôles</a></div>
+            </div>
+            <div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Utilisateurs actifs</span><strong class="stat-value">24</strong></div><div class="hero-stat-card"><span class="stat-label">Admins</span><strong class="stat-value">3</strong></div><div class="hero-stat-card"><span class="stat-label">Invitations en attente</span><strong class="stat-value">4</strong></div></div>
+        </section>
+        <section class="filters-bar"><div class="filters-left"><button class="filter-chip active">Tous</button><button class="filter-chip">Admin</button><button class="filter-chip">Editor</button><button class="filter-chip">Viewer</button><button class="filter-chip">Suspendu</button></div><select class="sort-select"><option>Trier par : récent</option><option>Trier par : nom</option><option>Trier par : rôle</option></select></section>
+        <section><div class="section-header"><div><p class="section-kicker">Annuaire</p><h3 class="section-title">Liste des utilisateurs</h3></div><a href="/activity" class="section-link">Voir l’historique</a></div>
+            <div class="table-card"><table class="data-table"><thead><tr><th>Utilisateur</th><th>Rôle</th><th>Équipe</th><th>Statut</th><th>Dernière activité</th><th>Actions</th></tr></thead><tbody>
+                <tr data-search-row="claire martin admin direction"><td><div class="identity"><div class="avatar">CM</div><div><strong>Claire Martin</strong><br><span class="muted">claire@dataplatform.local</span></div></div></td><td>Admin</td><td>Direction</td><td><span class="status-pill success">Actif</span></td><td>Aujourd’hui</td><td><a class="card-link ghost" href="/users/1">Profil</a></td></tr>
+                <tr data-search-row="nassim belkacem editor data"><td><div class="identity"><div class="avatar">NB</div><div><strong>Nassim Belkacem</strong><br><span class="muted">nassim@dataplatform.local</span></div></div></td><td>Data Engineer</td><td>Data</td><td><span class="status-pill success">Actif</span></td><td>Il y a 2h</td><td><a class="card-link ghost" href="/users/2">Profil</a></td></tr>
+                <tr data-search-row="emma durand viewer finance"><td><div class="identity"><div class="avatar">ED</div><div><strong>Emma Durand</strong><br><span class="muted">emma@dataplatform.local</span></div></div></td><td>Viewer</td><td>Finance</td><td><span class="status-pill warning">Invitation</span></td><td>Jamais</td><td><a class="card-link ghost" href="/users/3">Relancer</a></td></tr>
+            </tbody></table></div>
+        </section>
+    </main>
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+</body>
+</html>

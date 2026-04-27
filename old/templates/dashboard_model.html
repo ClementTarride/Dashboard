@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configurer un dashboard - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/dashboard_model.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text">
+                <h1>Data Platform</h1>
+                <p>Espace de gestion et de visualisation</p>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link">Accueil</a>
+            <a href="/model" class="nav-link">Model</a>
+            <a href="/source" class="nav-link">Sources</a>
+            <a href="/tables" class="nav-link">Tables</a>
+            <a href="#" class="nav-link">SQL</a>
+            <a href="/dasboard" class="nav-link active">Dashboard</a>
+        </nav>
+
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" placeholder="Rechercher..." />
+                <button type="submit">Rechercher</button>
+            </form>
+
+            <a href="#" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section class="hero">
+            <div class="hero-left">
+                <span class="eyebrow">Dashboard Builder</span>
+                <h2>Créer le modèle d’un dashboard à partir d’une source de données</h2>
+                <p>
+                    Un dashboard est rattaché à une source unique. Cette étape permet
+                    de définir sa structure générale, son contexte métier et les réglages
+                    principaux avant l’ajout futur des widgets et des requêtes SQL.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#" class="primary-btn">Créer le dashboard</a>
+                    <a href="#" class="secondary-btn">Voir les sources</a>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-stat-card">
+                    <span class="stat-label">Relation</span>
+                    <strong class="stat-value">1 dashboard = 1 source</strong>
+                </div>
+                <div class="hero-stat-card">
+                    <span class="stat-label">Évolution prévue</span>
+                    <strong class="stat-value">Plusieurs widgets</strong>
+                </div>
+                <div class="hero-stat-card">
+                    <span class="stat-label">Base fonctionnelle</span>
+                    <strong class="stat-value">Structure + Métadonnées</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="workspace-layout">
+            <div class="form-card">
+                <div class="section-header">
+                    <div>
+                        <p class="section-kicker">Configuration principale</p>
+                        <h3 class="section-title">Informations du dashboard</h3>
+                    </div>
+                </div>
+
+                <form action="#" method="post" class="dashboard-form">
+                    <div class="form-grid">
+                        <div class="input-group full-width">
+                            <label for="dashboard-name">Nom du dashboard</label>
+                            <input
+                                type="text"
+                                id="dashboard-name"
+                                name="dashboard_name"
+                                placeholder="Ex : Performance Commerciale"
+                                required
+                            >
+                        </div>
+
+                        <div class="input-group full-width">
+                            <label for="dashboard-description">Description</label>
+                            <textarea
+                                id="dashboard-description"
+                                name="dashboard_description"
+                                rows="5"
+                                placeholder="Décrivez le rôle du dashboard, les indicateurs suivis et le public concerné."
+                            ></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="dashboard-source">Source associée</label>
+                            <select id="dashboard-source" name="dashboard_source" required>
+                                <option value="">Sélectionner une source</option>
+                                <option value="postgresql-production">PostgreSQL Production</option>
+                                <option value="postgresql-analytics">PostgreSQL Analytics</option>
+                                <option value="mysql-crm">MySQL CRM</option>
+                                <option value="sqlserver-finance">SQL Server Finance</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="dashboard-domain">Domaine</label>
+                            <select id="dashboard-domain" name="dashboard_domain">
+                                <option value="">Sélectionner</option>
+                                <option value="sales">Sales</option>
+                                <option value="finance">Finance</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="operations">Operations</option>
+                                <option value="product">Produit</option>
+                                <option value="executive">Executive</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="dashboard-visibility">Visibilité</label>
+                            <select id="dashboard-visibility" name="dashboard_visibility">
+                                <option value="private">Privé</option>
+                                <option value="team">Équipe</option>
+                                <option value="company">Entreprise</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="dashboard-status">Statut</label>
+                            <select id="dashboard-status" name="dashboard_status">
+                                <option value="draft">Brouillon</option>
+                                <option value="active">Actif</option>
+                                <option value="archived">Archivé</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="refresh-frequency">Fréquence de rafraîchissement</label>
+                            <select id="refresh-frequency" name="refresh_frequency">
+                                <option value="manual">Manuel</option>
+                                <option value="hourly">Toutes les heures</option>
+                                <option value="daily">Tous les jours</option>
+                                <option value="weekly">Toutes les semaines</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="default-schema">Schéma par défaut</label>
+                            <input
+                                type="text"
+                                id="default-schema"
+                                name="default_schema"
+                                placeholder="public"
+                            >
+                        </div>
+
+                        <div class="input-group full-width">
+                            <label for="dashboard-tags">Tags</label>
+                            <input
+                                type="text"
+                                id="dashboard-tags"
+                                name="dashboard_tags"
+                                placeholder="Ex : KPI, ventes, mensuel, direction"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="section-header inner-header">
+                        <div>
+                            <p class="section-kicker">Préparation fonctionnelle</p>
+                            <h3 class="section-title">Prévisualisation des futurs widgets</h3>
+                        </div>
+                    </div>
+
+                    <div class="widget-preview-grid">
+                        <div class="widget-preview-card">
+                            <div class="widget-icon">▦</div>
+                            <h4>Tableau</h4>
+                            <p>Affichage tabulaire type Excel pour les résultats SQL.</p>
+                        </div>
+
+                        <div class="widget-preview-card">
+                            <div class="widget-icon">◔</div>
+                            <h4>Graphique</h4>
+                            <p>Visualisation des données sous forme de courbes, barres ou secteurs.</p>
+                        </div>
+
+                        <div class="widget-preview-card">
+                            <div class="widget-icon">◫</div>
+                            <h4>KPI</h4>
+                            <p>Mise en avant d’un indicateur clé unique avec valeur synthétique.</p>
+                        </div>
+
+                        <div class="widget-preview-card">
+                            <div class="widget-icon">⌖</div>
+                            <h4>Carte</h4>
+                            <p>Projection géographique ou localisation des données métier.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="secondary-btn">Tester la source</button>
+                        <button type="button" class="secondary-btn">Prévisualiser</button>
+                        <button type="submit" class="primary-btn">Enregistrer le dashboard</button>
+                    </div>
+                </form>
+            </div>
+
+            <aside class="side-panel">
+                <div class="summary-card">
+                    <div class="section-header small-header">
+                        <div>
+                            <p class="section-kicker">Résumé</p>
+                            <h3 class="section-title">Aperçu du dashboard</h3>
+                        </div>
+                    </div>
+
+                    <div class="summary-list">
+                        <div class="summary-row">
+                            <span class="summary-label">Nom</span>
+                            <span class="summary-value" id="preview-name">Non défini</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Source</span>
+                            <span class="summary-value" id="preview-source">Aucune</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Domaine</span>
+                            <span class="summary-value" id="preview-domain">—</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Visibilité</span>
+                            <span class="summary-value" id="preview-visibility">—</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Statut</span>
+                            <span class="summary-value" id="preview-status">Brouillon</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Widgets prévus</span>
+                            <span class="summary-value">Multiples</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="section-header small-header">
+                        <div>
+                            <p class="section-kicker">Architecture</p>
+                            <h3 class="section-title">Règles du modèle</h3>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Source unique</h4>
+                        <p>
+                            Chaque dashboard est lié à une seule source afin de garder
+                            une structure claire, stable et facile à maintenir.
+                        </p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Widgets multiples</h4>
+                        <p>
+                            Un dashboard pourra contenir plusieurs widgets organisés
+                            sur une même page ou sur plusieurs zones d’affichage.
+                        </p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>1 widget = 1 requête SQL</h4>
+                        <p>
+                            Chaque widget sera alimenté par une requête dédiée pour
+                            mieux contrôler les performances et la lisibilité.
+                        </p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Évolution future</h4>
+                        <p>
+                            Cette page pourra ensuite être prolongée par un éditeur
+                            de widgets, de requêtes SQL et de mise en page.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mock-card">
+                    <div class="section-header small-header">
+                        <div>
+                            <p class="section-kicker">Mockup</p>
+                            <h3 class="section-title">Aperçu visuel</h3>
+                        </div>
+                    </div>
+
+                    <div class="mock-dashboard">
+                        <div class="mock-topbar"></div>
+                        <div class="mock-kpi-row">
+                            <div class="mock-kpi"></div>
+                            <div class="mock-kpi"></div>
+                            <div class="mock-kpi"></div>
+                        </div>
+                        <div class="mock-chart"></div>
+                        <div class="mock-table"></div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', path='js/dashboard_model.js') }}"></script>
+</body>
+</html>

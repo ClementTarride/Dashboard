@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rôles - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text"><h1>Data Platform</h1><p>Espace de gestion et de visualisation</p></div>
+        </div>
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link ">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link ">Sources</a>
+            <a href="/tables" class="nav-link ">Tables</a>
+            <a href="#" class="nav-link ">SQL</a>
+            <a href="/dashboard" class="nav-link ">Dashboard</a>
+            <a href="/users" class="nav-link active">Utilisateurs</a>
+            <a href="/teams" class="nav-link ">Équipes</a>
+            <a href="/profile" class="nav-link ">Profil</a>
+        </nav>
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" data-admin-search placeholder="Rechercher un rôle..." />
+                <button type="submit">Rechercher</button>
+            </form>
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+    <main class="page-content">
+        <section class="hero"><div class="hero-left"><span class="eyebrow">Permissions</span><h2>Contrôlez précisément qui peut voir, créer ou modifier</h2><p>Définissez des rôles simples et auditables pour sécuriser les sources, modèles, dashboards et requêtes SQL.</p><div class="hero-actions"><button class="primary-btn">Créer un rôle</button><a href="/users" class="secondary-btn">Retour utilisateurs</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Rôles</span><strong class="stat-value">4</strong></div><div class="hero-stat-card"><span class="stat-label">Permissions</span><strong class="stat-value">16</strong></div><div class="hero-stat-card"><span class="stat-label">Risque</span><strong class="stat-value">SQL sensible</strong></div></div></section>
+        <section class="split-layout"><div class="form-card"><h3>Rôles standards</h3><div class="permission-list" style="margin-top:18px"><div class="list-item"><strong>Admin</strong><p>Gestion complète : sources, utilisateurs, équipes, rôles et dashboards.</p></div><div class="list-item"><strong>Data Engineer</strong><p>Gestion des sources, tables, modèles SQL et tests de connexion.</p></div><div class="list-item"><strong>Analyst</strong><p>Création de dashboards et widgets sans gérer les connexions sensibles.</p></div><div class="list-item"><strong>Viewer</strong><p>Consultation uniquement des dashboards autorisés.</p></div></div></div><div class="form-card"><h3>Matrice de permissions</h3><table class="data-table"><thead><tr><th>Permission</th><th>Admin</th><th>Engineer</th><th>Analyst</th><th>Viewer</th></tr></thead><tbody><tr><td>Voir dashboard</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr><tr><td>Éditer dashboard</td><td>✓</td><td>✓</td><td>✓</td><td>—</td></tr><tr><td>Créer source</td><td>✓</td><td>✓</td><td>—</td><td>—</td></tr><tr><td>Exécuter SQL</td><td>✓</td><td>✓</td><td>Limité</td><td>—</td></tr></tbody></table></div></section>
+    </main>
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+</body>
+</html>

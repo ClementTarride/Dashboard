@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connexion / Inscription</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+<body>
+    <main class="page">
+        <section class="auth-section">
+            <div class="auth-container" id="authContainer">
+
+                <div class="form-panel login-panel">
+                    <form class="form-box" action="/login" method="post">
+                        <h1>Connexion</h1>
+
+                        <div class="input-group">
+                            <label for="login-email">Adresse email</label>
+                            <input
+                                type="email"
+                                id="login-email"
+                                name="email"
+                                placeholder="exemple@mail.com"
+                                required
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="login-password">Mot de passe</label>
+                            <input
+                                type="password"
+                                id="login-password"
+                                name="password"
+                                placeholder="Votre mot de passe"
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="btn">Connexion</button>
+
+                        <p class="switch-text">
+                            Pas encore enregistré ?
+                            <button type="button" class="switch-btn" id="showRegister">
+                                S'inscrire
+                            </button>
+                        </p>
+                    </form>
+                </div>
+
+                <div class="form-panel register-panel">
+                    <form class="form-box" action="/register" method="post">
+                        <h1>Inscription</h1>
+
+                        <div class="input-group">
+                            <label for="register-name">Nom complet</label>
+                            <input
+                                type="text"
+                                id="register-name"
+                                name="fullname"
+                                placeholder="Votre nom"
+                                required
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="register-email">Adresse email</label>
+                            <input
+                                type="email"
+                                id="register-email"
+                                name="email"
+                                placeholder="exemple@mail.com"
+                                required
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="register-password">Mot de passe</label>
+                            <input
+                                type="password"
+                                id="register-password"
+                                name="password"
+                                placeholder="Choisissez un mot de passe"
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="btn">S'inscrire</button>
+
+                        <p class="switch-text">
+                            Déjà un compte ?
+                            <button type="button" class="switch-btn" id="showLogin">
+                                Se connecter
+                            </button>
+                        </p>
+                    </form>
+                </div>
+
+                <div class="overlay-panel">
+                    <div class="overlay-content" id="overlayContent">
+                        <h2 id="overlayTitle">Bienvenue</h2>
+                        <p id="overlayDescription">
+                            Connecte-toi pour accéder à ton espace personnel.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', path='js/app.js') }}"></script>
+</body>
+</html>

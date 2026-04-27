@@ -1,0 +1,279 @@
+Schéma principal
+-- UTILISATEURS / ÉQUIPES / RÔLES
+
+users (
+  id PK,
+  full_name,
+  email UNIQUE,
+  password_hash,
+  avatar_url,
+  status, -- active, invited, suspended
+  last_activity_at,
+  created_at,
+  updated_at
+)
+
+teams (
+  id PK,
+  name,
+  type, -- business, technical, restricted
+  description,
+  status,
+  created_at
+)
+
+team_members (
+  team_id FK,
+  user_id FK,
+  role_id FK,
+  joined_at,
+  PRIMARY KEY (team_id, user_id)
+)
+
+roles (
+  id PK,
+  name UNIQUE, -- Admin, Data Engineer, Editor, Viewer
+  description
+)
+
+permissions (
+  id PK,
+  code UNIQUE, -- dashboard.read, dashboard.edit, source.admin
+  label
+)
+
+role_permissions (
+  role_id FK,
+  permission_id FK,
+  PRIMARY KEY (role_id, permission_id)
+)
+Sources de données
+sources (
+  id PK,
+  name,
+  db_type, -- postgresql, mysql, sqlserver, sqlite, oracle
+  environment, -- production, staging, development, test
+  host,
+  port,
+  database_name,
+  schema_name,
+  username,
+  password_secret_ref,
+  ssl_enabled,
+  status, -- active, warning, error, archived
+  description,
+  last_test_at,
+  created_by FK users(id),
+  created_at,
+  updated_at
+)
+
+connection_tests (
+  id PK,
+  source_id FK,
+  status,
+  message,
+  tested_by FK users(id),
+  tested_at
+)
+Tables / fonctions explorées
+data_objects (
+  id PK,
+  source_id FK,
+  name,
+  object_type, -- table, view, function
+  schema_name,
+  description,
+  primary_key,
+  signature,
+  return_type,
+  columns_count,
+  last_analysis_at
+)
+
+data_object_columns (
+  id PK,
+  data_object_id FK,
+  name,
+  data_type,
+  nullable,
+  is_primary_key,
+  ordinal_position
+)
+Modèles
+models (
+  id PK,
+  name UNIQUE,
+  title,
+  domain, -- sales, finance, marketing, operations, customer...
+  status, -- ready, draft, archived
+  main_attribute,
+  description,
+  created_by FK users(id),
+  created_at,
+  updated_at
+)
+
+model_sources (
+  model_id FK,
+  source_id FK,
+  PRIMARY KEY (model_id, source_id)
+)
+
+model_parameters (
+  id PK,
+  model_id FK,
+  name,
+  label,
+  data_type,
+  required,
+  default_value
+)
+
+model_queries (
+  id PK,
+  model_id FK,
+  source_id FK,
+  title,
+  sql_text,
+  metric_name,
+  created_at
+)
+Dashboards / widgets
+dashboards (
+  id PK,
+  name,
+  description,
+  domain,
+  visibility, -- private, team, company
+  status, -- draft, active, archived
+  refresh_frequency,
+  default_schema,
+  owner_id FK users(id),
+  created_at,
+  updated_at
+)
+
+dashboard_sources (
+  dashboard_id FK,
+  source_id FK,
+  PRIMARY KEY (dashboard_id, source_id)
+)
+
+widgets (
+  id PK,
+  dashboard_id FK,
+  model_id FK NULL,
+  source_id FK,
+  title,
+  widget_type, -- kpi, chart, table, list, text
+  sql_text,
+  refresh_frequency,
+  position_order,
+  description,
+  created_at,
+  updated_at
+)
+
+widget_results_cache (
+  id PK,
+  widget_id FK,
+  payload_json,
+  generated_at
+)
+Partage / accès
+resource_permissions (
+  id PK,
+  resource_type, -- dashboard, source, model
+  resource_id,
+  user_id FK NULL,
+  team_id FK NULL,
+  permission, -- read, edit, admin
+  expires_at NULL,
+  created_by FK users(id),
+  created_at
+)
+Notifications / historique
+notifications (
+  id PK,
+  user_id FK,
+  type,
+  title,
+  message,
+  is_read,
+  created_at
+)
+
+activity_logs (
+  id PK,
+  user_id FK NULL,
+  action,
+  entity_type,
+  entity_id,
+  metadata_json,
+  created_at
+)
+Organisation
+folders (
+  id PK,
+  name,
+  parent_id FK folders(id) NULL,
+  owner_id FK users(id),
+  created_at
+)
+
+folder_dashboards (
+  folder_id FK,
+  dashboard_id FK,
+  PRIMARY KEY (folder_id, dashboard_id)
+)
+
+favorites (
+  user_id FK,
+  resource_type,
+  resource_id,
+  created_at,
+  PRIMARY KEY (user_id, resource_type, resource_id)
+)
+
+tags (
+  id PK,
+  name UNIQUE
+)
+
+dashboard_tags (
+  dashboard_id FK,
+  tag_id FK,
+  PRIMARY KEY (dashboard_id, tag_id)
+)
+Paramètres
+user_preferences (
+  user_id PK FK users(id),
+  theme,
+  language,
+  timezone,
+  notification_email_enabled,
+  notification_app_enabled
+)
+
+platform_settings (
+  id PK,
+  setting_key UNIQUE,
+  setting_value,
+  updated_at
+)
+Points à surveiller
+
+Le point le plus sensible est resource_permissions : comme resource_id dépend de resource_type, ce n’est pas une vraie clé étrangère stricte. C’est flexible, mais moins sûr. Alternative plus propre : créer trois tables séparées dashboard_permissions, source_permissions, model_permissions.
+
+Autre point important : ne stocke jamais les mots de passe de sources en clair. Garde seulement password_secret_ref.
+
+Pour moi, ton modèle central devient :
+
+users / teams / roles
+        ↓
+sources → data_objects → models
+        ↓              ↓
+     dashboards → widgets
+        ↓
+permissions / notifications / activity_logs

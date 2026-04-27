@@ -1,0 +1,7 @@
+{% for model in models %}
+<a href="#" class="item-card">
+    <span class="item-badge">Model</span>
+    <h4>{{ model.name }}</h4>
+    <p>{{ model.description }}</p>
+</a>
+{% endfor %}

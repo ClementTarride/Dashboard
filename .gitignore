@@ -1,0 +1,14 @@
+__pycache__/
+
+env/
+.env
+
+*.key
+*.crt
+*.db
+
+/data_platform.db
+/certificate.crf
+/private.key
+
+/app/config.py

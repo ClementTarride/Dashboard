@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text"><h1>Data Platform</h1><p>Espace de gestion et de visualisation</p></div>
+        </div>
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link ">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link ">Sources</a>
+            <a href="/tables" class="nav-link ">Tables</a>
+            <a href="#" class="nav-link ">SQL</a>
+            <a href="/dashboard" class="nav-link ">Dashboard</a>
+            <a href="/users" class="nav-link ">Utilisateurs</a>
+            <a href="/teams" class="nav-link ">Équipes</a>
+            <a href="/profile" class="nav-link active">Profil</a>
+        </nav>
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" data-admin-search placeholder="Rechercher dans le profil..." />
+                <button type="submit">Rechercher</button>
+            </form>
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+    <main class="page-content">
+        <section class="hero"><div class="hero-left"><span class="eyebrow">Mon profil</span><h2>Personnalisez votre identité et vos préférences</h2><p>Modifiez votre avatar, vos informations personnelles, votre thème et vos préférences de notifications.</p><div class="hero-actions"><button class="primary-btn">Enregistrer</button><a href="/notifications" class="secondary-btn">Notifications</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Rôle</span><strong class="stat-value">Admin</strong></div><div class="hero-stat-card"><span class="stat-label">Équipe principale</span><strong class="stat-value">Direction</strong></div><div class="hero-stat-card"><span class="stat-label">Dernière connexion</span><strong class="stat-value">Aujourd’hui</strong></div></div></section>
+        <section class="split-layout"><div class="form-card"><div class="identity" style="margin-bottom:22px"><div class="avatar large">CM</div><div><h3>Claire Martin</h3><p class="muted">claire@dataplatform.local</p></div></div><div class="form-grid"><div class="field"><label>Nom complet</label><input value="Claire Martin"></div><div class="field"><label>Email</label><input value="claire@dataplatform.local"></div><div class="field"><label>Avatar</label><input type="file" accept="image/*"></div><div class="field"><label>Timezone</label><select><option>Europe/Paris</option><option>UTC</option></select></div><div class="field"><label>Thème</label><select><option>Système</option><option>Dark</option><option>Light</option></select></div><div class="field"><label>Langue</label><select><option>Français</option><option>English</option></select></div></div><div class="form-actions"><button class="card-link">Sauvegarder</button><button class="card-link ghost">Réinitialiser</button></div></div>
+        <div class="form-card"><h3>Préférences de sécurité</h3><div class="permission-list" style="margin-top:18px"><div class="list-item"><strong>Mot de passe</strong><p>Dernière modification il y a 32 jours.</p></div><div class="list-item"><strong>Sessions actives</strong><p>2 sessions connectées. Pensez à les révoquer si besoin.</p></div><div class="list-item"><strong>Notifications email</strong><p>Activées pour les erreurs de refresh, partages et invitations.</p></div></div></div></section>
+    </main>
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+</body>
+</html>

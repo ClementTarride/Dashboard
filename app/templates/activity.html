@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Historique - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text"><h1>Data Platform</h1><p>Espace de gestion et de visualisation</p></div>
+        </div>
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link ">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link ">Sources</a>
+            <a href="/tables" class="nav-link ">Tables</a>
+            <a href="#" class="nav-link ">SQL</a>
+            <a href="/dashboard" class="nav-link ">Dashboard</a>
+            <a href="/users" class="nav-link active">Utilisateurs</a>
+            <a href="/teams" class="nav-link ">Équipes</a>
+            <a href="/profile" class="nav-link ">Profil</a>
+        </nav>
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" data-admin-search placeholder="Rechercher dans les logs..." />
+                <button type="submit">Rechercher</button>
+            </form>
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+    <main class="page-content">
+        <section class="hero"><div class="hero-left"><span class="eyebrow">Audit Trail</span><h2>Gardez une trace claire des actions sensibles</h2><p>Consultez les modifications de dashboards, changements de droits, tests de sources et exécutions SQL.</p><div class="hero-actions"><button class="primary-btn">Exporter les logs</button><a href="/users" class="secondary-btn">Utilisateurs</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Actions aujourd’hui</span><strong class="stat-value">42</strong></div><div class="hero-stat-card"><span class="stat-label">SQL exécutés</span><strong class="stat-value">17</strong></div><div class="hero-stat-card"><span class="stat-label">Modifications accès</span><strong class="stat-value">6</strong></div></div></section>
+        <section class="form-card"><h3>Historique récent</h3><div class="timeline-list" style="margin-top:18px"><div class="list-item" data-search-card="claire dashboard"><strong>Claire Martin · Dashboard modifié</strong><p>Ajout du widget “CA par région” dans Sales Performance · il y a 20 min.</p></div><div class="list-item" data-search-card="nassim source"><strong>Nassim Belkacem · Source testée</strong><p>Test de connexion réussi sur Warehouse PROD · il y a 1h.</p></div><div class="list-item" data-search-card="admin role"><strong>Admin · Permission modifiée</strong><p>L’équipe Finance a reçu un accès édition temporaire · hier.</p></div></div></section>
+    </main>
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+</body>
+</html>

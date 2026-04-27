@@ -1,0 +1,303 @@
+<!-- model.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Models - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/Model.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text">
+                <h1>Data Platform</h1>
+                <p>Espace de gestion et de visualisation</p>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link">Accueil</a>
+            <a href="/model" class="nav-link active">Model</a>
+            <a href="/source" class="nav-link">Sources</a>
+            <a href="/tables" class="nav-link">Tables</a>
+            <a href="#" class="nav-link">SQL</a>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/users" class="nav-link">Utilisateurs</a>
+            <a href="/teams" class="nav-link">Équipes</a>
+            <a href="/profile" class="nav-link">Profil</a>
+        </nav>
+
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input
+                    type="text"
+                    id="modelSearch"
+                    placeholder="Rechercher un model, un attribut, une source..."
+                />
+                <button type="submit">Rechercher</button>
+            </form>
+
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <section class="hero">
+            <div class="hero-left">
+                <span class="eyebrow">Model Explorer</span>
+                <h2>Créez des dashboards paramétrés à partir de vos sources</h2>
+                <p>
+                    Un model regroupe une ou plusieurs requêtes de référence et prépare
+                    automatiquement un dashboard centré sur un attribut métier. Chaque widget
+                    reste rattaché à une seule source pour garder une lecture claire, traçable
+                    et réutilisable.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#" class="primary-btn">Créer un model</a>
+                    <a href="#" class="secondary-btn">Voir les sources</a>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="hero-stat-card">
+                    <span class="stat-label">Models configurés</span>
+                    <strong class="stat-value" id="statModels">{{ stat_models }}</strong>
+                </div>
+
+                <div class="hero-stat-card">
+                    <span class="stat-label">Widgets générés</span>
+                    <strong class="stat-value" id="statWidgets">{{ stat_widgets }}</strong>
+                </div>
+
+                <div class="hero-stat-card">
+                    <span class="stat-label">Sources couvertes</span>
+                    <strong class="stat-value" id="statSources">{{ stat_sources }}</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="filters-bar">
+            <div class="filters-left">
+                <button class="filter-chip active" data-filter="all">Tous</button>
+                <button class="filter-chip" data-filter="customer">Customer</button>
+                <button class="filter-chip" data-filter="sales">Sales</button>
+                <button class="filter-chip" data-filter="finance">Finance</button>
+                <button class="filter-chip" data-filter="operations">Operations</button>
+                <button class="filter-chip" data-filter="ready">Prêts</button>
+                <button class="filter-chip" data-filter="draft">Brouillons</button>
+            </div>
+
+            <div class="filters-right">
+                <select class="sort-select" id="modelSort">
+                    <option value="recent">Trier par : récent</option>
+                    <option value="name">Trier par : nom</option>
+                    <option value="widgets">Trier par : widgets</option>
+                    <option value="sources">Trier par : sources</option>
+                    <option value="status">Trier par : statut</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="catalog-section">
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker">Catalogue de models</p>
+                    <h3 class="section-title">Dashboards paramétrables disponibles</h3>
+                </div>
+                <a href="#" class="section-link">Exporter les models</a>
+            </div>
+
+        {% for model in models %}
+        <article
+            class="model-card open-model-modal"
+            data-name="{{ model.name }}"
+            data-title="{{ model.title }}"
+            data-domain="{{ model.domain }}"
+            data-status="{{ model.status }}"
+            data-status-label="{{ model.status_label }}"
+            data-attribute="{{ model.main_attribute }}"
+            data-description="{{ model.description }}"
+            data-sources="{{ model.source_names | join(', ') }}"
+            data-source-count="{{ model.source_count }}"
+            data-widget-count="{{ model.widget_count }}"
+            data-query-count="{{ model.query_count }}"
+            data-last-update="{{ model.last_update }}"
+            data-template-route="{{ model.template_route }}"
+            data-parameters='{{ model.parameters | tojson }}'
+            data-widgets='{{ model.widgets | tojson }}'
+            data-preview='{{ model.preview | tojson }}'
+        >
+            <div class="card-top">
+                <div class="card-badges">
+                    <span class="card-badge {{ model.domain }}-badge">
+                        {{ model.domain | capitalize }}
+                    </span>
+
+                    {% if model.status == "ready" %}
+                        <span class="status-badge ready-badge">Prêt</span>
+                    {% elif model.status == "draft" %}
+                        <span class="status-badge draft-badge">Brouillon</span>
+                    {% else %}
+                        <span class="status-badge">{{ model.status_label }}</span>
+                    {% endif %}
+                </div>
+
+                <button class="icon-btn" title="Options" type="button">•••</button>
+            </div>
+
+            <h4>{{ model.title }}</h4>
+
+            <p class="card-description">
+                {{ model.description }}
+            </p>
+
+            <div class="model-flow">
+                <span>Attribut</span>
+                <strong>{{ model.main_attribute }}</strong>
+                <span class="flow-arrow">→</span>
+                <strong>Dashboard pré-paramétré</strong>
+            </div>
+
+            <div class="card-info-list">
+                <div class="info-row">
+                    <span class="info-label">Sources</span>
+                    <span class="info-value">{{ model.source_count }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Widgets</span>
+                    <span class="info-value">{{ model.widget_count }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Requêtes</span>
+                    <span class="info-value">{{ model.query_count }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Dernière MAJ</span>
+                    <span class="info-value">{{ model.last_update }}</span>
+                </div>
+            </div>
+
+            <div class="source-pills">
+                {% for source in model.source_names %}
+                    <span>{{ source }}</span>
+                {% else %}
+                    <span>Aucune source</span>
+                {% endfor %}
+            </div>
+
+            <div class="card-footer">
+                <button class="card-link open-model-modal-btn" type="button">Ouvrir</button>
+                <button class="card-link ghost open-model-modal-btn" type="button">Widgets</button>
+                <button class="neutral-link open-model-modal-btn" type="button">Logique</button>
+            </div>
+        </article>
+        {% else %}
+        <p>Aucun model configuré pour le moment.</p>
+        {% endfor %}
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="modelModal">
+        <div class="modal-panel">
+            <div class="modal-header">
+                <div>
+                    <p class="section-kicker">Détail du model</p>
+                    <h3 class="modal-title" id="modalModelTitle">Model</h3>
+                    <p class="modal-subtitle" id="modalModelSubtitle">Attribut • Sources • Statut</p>
+                </div>
+                <button class="close-modal-btn" id="closeModelModal" type="button">&times;</button>
+            </div>
+
+            <div class="modal-top-grid">
+                <div class="modal-info-card">
+                    <h4>Logique du model</h4>
+                    <div class="logic-flow">
+                        <div class="logic-step">
+                            <span>1</span>
+                            <strong>Attribut recherché</strong>
+                            <small id="logicAttribute">customer_id</small>
+                        </div>
+                        <div class="logic-separator"></div>
+                        <div class="logic-step">
+                            <span>2</span>
+                            <strong>Jeu de requêtes</strong>
+                            <small id="logicQueryCount">4 requêtes</small>
+                        </div>
+                        <div class="logic-separator"></div>
+                        <div class="logic-step">
+                            <span>3</span>
+                            <strong>Dashboard généré</strong>
+                            <small id="logicWidgetCount">4 widgets</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-info-card">
+                    <h4>Informations générales</h4>
+                    <div class="modal-info-list" id="modalInfoList"></div>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-header">
+                    <h4>Description</h4>
+                    <button type="button" class="neutral-link" id="simulateModelBtn">Simuler</button>
+                </div>
+                <p class="modal-description" id="modalDescription"></p>
+                <div class="modal-tags" id="modalTags"></div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-header">
+                    <h4>Paramètres attendus</h4>
+                    <button type="button" class="neutral-link">Ajouter un paramètre</button>
+                </div>
+                <div class="detail-table-wrapper">
+                    <table class="detail-table" id="modalParameterTable"></table>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-header">
+                    <h4>Widgets générés</h4>
+                    <span class="modal-hint">Règle : 1 widget = 1 source</span>
+                </div>
+                <div class="widget-grid" id="modalWidgetGrid"></div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-header">
+                    <h4>Simulation de dashboard</h4>
+                    <button type="button" class="neutral-link">Ouvrir le dashboard</button>
+                </div>
+                <div class="simulation-box">
+                    <div class="simulation-form">
+                        <label for="simulationAttribute">Valeur d’attribut</label>
+                        <input type="text" id="simulationAttribute" placeholder="Ex : 101, 8451, SKU-8842..." />
+                        <button type="button" class="primary-btn" id="buildRouteBtn">Préparer la route</button>
+                    </div>
+                    <div class="route-preview" id="routePreview">La route pré-paramétrée apparaîtra ici.</div>
+                </div>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-header">
+                    <h4>Aperçu de résultat</h4>
+                    <button type="button" class="neutral-link">Copier JSON</button>
+                </div>
+                <div class="data-preview-wrapper">
+                    <table class="data-preview-table" id="modalPreviewTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', path='js/Model.js') }}"></script>
+</body>
+</html>

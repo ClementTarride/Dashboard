@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paramètres - Data Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-logo">DP</div>
+            <div class="brand-text"><h1>Data Platform</h1><p>Espace de gestion et de visualisation</p></div>
+        </div>
+        <nav class="main-nav">
+            <a href="/acceuil" class="nav-link ">Accueil</a>
+            <a href="/model" class="nav-link ">Model</a>
+            <a href="/source" class="nav-link ">Sources</a>
+            <a href="/tables" class="nav-link ">Tables</a>
+            <a href="#" class="nav-link ">SQL</a>
+            <a href="/dashboard" class="nav-link ">Dashboard</a>
+            <a href="/users" class="nav-link active">Utilisateurs</a>
+            <a href="/teams" class="nav-link ">Équipes</a>
+            <a href="/profile" class="nav-link ">Profil</a>
+        </nav>
+        <div class="topbar-actions">
+            <form class="search-bar" action="#" method="get">
+                <input type="text" data-admin-search placeholder="Rechercher un paramètre..." />
+                <button type="submit">Rechercher</button>
+            </form>
+            <a href="/logout" class="logout-btn">Déconnexion</a>
+        </div>
+    </header>
+    <main class="page-content">
+        <section class="hero"><div class="hero-left"><span class="eyebrow">Admin Settings</span><h2>Configurez les paramètres globaux de la plateforme</h2><p>Définissez les limites de refresh, timeouts, politiques d’accès, conservation des logs et préférences par défaut.</p><div class="hero-actions"><button class="primary-btn">Enregistrer</button><a href="/activity" class="secondary-btn">Voir les logs</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Timeout SQL</span><strong class="stat-value">60 sec</strong></div><div class="hero-stat-card"><span class="stat-label">Logs conservés</span><strong class="stat-value">180 j</strong></div><div class="hero-stat-card"><span class="stat-label">Mode sécurité</span><strong class="stat-value">Strict</strong></div></div></section>
+        <section class="form-card"><h3>Paramètres</h3><div class="form-grid" style="margin-top:18px"><div class="field"><label>Fréquence de refresh par défaut</label><select><option>1 heure</option><option>4 heures</option><option>1 jour</option></select></div><div class="field"><label>Timeout SQL</label><input value="60"></div><div class="field"><label>Conservation des logs</label><input value="180 jours"></div><div class="field"><label>Politique de lien public</label><select><option>Désactivé</option><option>Autorisé avec expiration</option></select></div><div class="field"><label>Rôle par défaut</label><select><option>Viewer</option><option>Analyst</option></select></div><div class="field"><label>Thème par défaut</label><select><option>Système</option><option>Dark</option><option>Light</option></select></div></div></section>
+    </main>
+    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+</body>
+</html>
