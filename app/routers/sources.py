@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends, Form,HTTPException
 from fastapi.templating import Jinja2Templates
 from datetime import datetime
 from sqlalchemy.orm import Session, selectinload
-from app.db.database import get_db
+from app.db.database import get_db, test_bd_connection
 from app.db.models.sources_db import CatalogSources, CatalogConnectionTests
 from fastapi.responses import RedirectResponse
 from app.routers.get_current_user import get_current_user
@@ -126,20 +126,32 @@ def create_source(
 
         db.add(source)
         db.commit()
+        source_test = CatalogConnectionTests(
+            source_id = source.id,
+            status = "active",
+            message = source.description,
+            tested_by = current_user.id,
+            tested_at = now,
+        )
+        db.add(source_test)
+        db.commit()
 
         return RedirectResponse(url="/source", status_code=303)
 
 @router.post("/source/{source_id}/delete")
 def delete_source(source_id: int, db: Session = Depends(get_db)):
     source = db.query(CatalogSources).filter(CatalogSources.id == source_id).first()
-
+    source_test = db.query(CatalogConnectionTests).filter(CatalogConnectionTests.source_id == source_id).first()
     if not source:
         raise HTTPException(status_code=404, detail="Source introuvable")
-
+    if not source_test:
+        raise HTTPException(status_code=404, detail="Source test introuvable ")
+    db.delete(source_test)
     db.delete(source)
     db.commit()
 
     return RedirectResponse(url="/source", status_code=303)
+
 
 @router.post("/source/{source_id}/test")
 def test_source(
@@ -155,14 +167,29 @@ def test_source(
         )
         .first()
     )
-    #connexion_test = (db.query(CatalogConnectionTests).filter())
+
     if not source:
         raise HTTPException(status_code=404, detail="Source introuvable")
 
-    source.last_test_at = datetime.now()
-    source.status = "active"
-    source.updated_at = datetime.now()
+    now = datetime.now()
 
+    # Test de connexion :
+    
+    success, message = test_bd_connection(source.db_type,source.username,source.password_secret_ref,source.host,source.port,source.database_name)
+
+    source.last_test_at = now
+    source.status = "active" if success else "error"
+    source.updated_at = now
+
+    connection_test = CatalogConnectionTests(
+        source_id=source.id,
+        status="success" if success else "error",
+        message=message,
+        tested_by=current_user.id,
+        tested_at=now,
+    )
+
+    db.add(connection_test)
     db.commit()
 
     return RedirectResponse(url="/source", status_code=303)

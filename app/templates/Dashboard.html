@@ -7,244 +7,165 @@
     <link rel="stylesheet" href="{{ url_for('static', path='css/Dashboard.css') }}">
 </head>
 <body>
-    <header class="topbar">
-        <div class="brand-block">
-            <div class="brand-logo">DP</div>
-            <div class="brand-text">
-                <h1>Data Platform</h1>
-                <p>Espace de gestion et de visualisation</p>
+<header class="topbar">
+    <div class="brand-block">
+        <div class="brand-logo">DP</div>
+        <div class="brand-text">
+            <h1>Data Platform</h1>
+            <p>Espace de gestion et de visualisation</p>
+        </div>
+    </div>
+
+    <nav class="main-nav">
+        <a href="/acceuil" class="nav-link">Accueil</a>
+        <a href="/model" class="nav-link">Model</a>
+        <a href="/source" class="nav-link">Sources</a>
+        <a href="/tables" class="nav-link">Tables</a>
+        <a href="#" class="nav-link">SQL</a>
+        <a href="/dashboard" class="nav-link active">Dashboard</a>
+        <a href="/users" class="nav-link">Utilisateurs</a>
+        <a href="/teams" class="nav-link">Équipes</a>
+        <a href="/profile" class="nav-link">Profil</a>
+    </nav>
+
+    <div class="topbar-actions">
+        <form class="search-bar" method="get" action="/dashboard">
+            <input
+                type="text"
+                name="q"
+                id="dashboardSearch"
+                value="{{ request.query_params.get('q', '') }}"
+                placeholder="Rechercher un dashboard..."
+            />
+            <button type="submit">Rechercher</button>
+        </form>
+
+        <a href="/logout" class="logout-btn">Déconnexion</a>
+    </div>
+</header>
+
+<main class="page-content">
+    <section class="hero">
+        <div class="hero-left">
+            <span class="eyebrow">Dashboard Center</span>
+            <h2>Pilotez vos indicateurs avec une vue claire et centralisée</h2>
+            <p>
+                Retrouvez ici l’ensemble de vos dashboards analytiques.
+                Accédez rapidement aux vues stratégiques, opérationnelles
+                et métiers depuis une interface unique.
+            </p>
+
+            <div class="hero-actions">
+                <a href="/dashboard/new" class="primary-btn">Créer un dashboard</a>
+                <a href="#" class="secondary-btn">Gérer les accès</a>
             </div>
         </div>
 
-        <nav class="main-nav">
-            <a href="/acceuil" class="nav-link">Accueil</a>
-            <a href="/model" class="nav-link">Model</a>
-            <a href="/source" class="nav-link">Sources</a>
-            <a href="/tables" class="nav-link">Tables</a>
-            <a href="#" class="nav-link">SQL</a>
-            <a href="/dashboard" class="nav-link active">Dashboard</a>
-            <a href="/users" class="nav-link">Utilisateurs</a>
-            <a href="/teams" class="nav-link">Équipes</a>
-            <a href="/profile" class="nav-link">Profil</a>
-        </nav>
+        <div class="hero-right">
+            <div class="hero-stat-card">
+                <span class="stat-label">Dashboards actifs</span>
+                <strong class="stat-value">{{ active_count }}</strong>
+            </div>
 
-        <div class="topbar-actions">
-            <form class="search-bar" action="#" method="get">
-                <input
-                    type="text"
-                    id="dashboardSearch"
-                    placeholder="Rechercher un dashboard..."
-                />
-                <button type="submit">Rechercher</button>
-            </form>
-
-            <a href="/logout" class="logout-btn">Déconnexion</a>
+            <div class="hero-stat-card">
+                <span class="stat-label">Widgets configurés</span>
+                <strong class="stat-value">{{ widget_count }}</strong>
+            </div>
+        <div class="hero-stat-card">
+            <span class="stat-label">Sources connectées</span>
+            <strong class="stat-value">{{ source_count }}</strong>
         </div>
-    </header>
+    </section>
 
-    <main class="page-content">
-        <section class="hero">
-            <div class="hero-left">
-                <span class="eyebrow">Dashboard Center</span>
-                <h2>Pilotez vos indicateurs avec une vue claire et centralisée</h2>
+    <section class="filters-bar">
+        <div class="filters-left">
+            <button class="filter-chip active" data-filter="Tous">Tous</button>
+            <button class="filter-chip" data-filter="Exécutif">Exécutif</button>
+            <button class="filter-chip" data-filter="Finance">Finance</button>
+            <button class="filter-chip" data-filter="Marketing">Marketing</button>
+            <button class="filter-chip" data-filter="Opérations">Opérations</button>
+            <button class="filter-chip" data-filter="Produit">Produit</button>
+        </div>
+
+        <div class="filters-right">
+            <select class="sort-select" id="dashboardSort">
+                <option value="recent">Trier par : récent</option>
+                <option value="name">Trier par : nom</option>
+                <option value="team">Trier par : équipe</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="dashboard-section">
+        <div class="section-header">
+            <div>
+                <p class="section-kicker">Catalogue analytique</p>
+                <h3 class="section-title">Liste des dashboards</h3>
+            </div>
+            <a href="#" class="section-link">Voir l’historique</a>
+        </div>
+
+        <div class="dashboard-grid" id="dashboardGrid">
+            {% for dashboard in dashboards %}
+            <article
+                class="dashboard-card"
+                data-name="{{ dashboard.name }}"
+                data-category="{{ dashboard.domain or 'Général' }}"
+                data-status="{{ dashboard.status }}"
+            >
+                <div class="card-top">
+                    <span class="card-badge">{{ dashboard.domain or "Général" }}</span>
+
+                    {% if dashboard.status == "active" %}
+                        <span class="card-status online">Actif</span>
+                    {% elif dashboard.status == "draft" %}
+                        <span class="card-status maintenance">Brouillon</span>
+                    {% else %}
+                        <span class="card-status archived">Archivé</span>
+                    {% endif %}
+                </div>
+
+                <h4>{{ dashboard.name }}</h4>
+
                 <p>
-                    Retrouvez ici l’ensemble de vos dashboards analytiques.
-                    Accédez rapidement aux vues stratégiques, opérationnelles
-                    et métiers depuis une interface unique.
+                    {{ dashboard.description or "Aucune description renseignée pour ce dashboard." }}
                 </p>
 
-                <div class="hero-actions">
-                    <a href="dashboard/new" class="primary-btn">Créer un dashboard</a>
-                    <a href="#" class="secondary-btn">Gérer les accès</a>
+                <div class="card-meta">
+                    <span>Visibilité : {{ dashboard.visibility }}</span>
+                    <span>Fréquence : {{ dashboard.refresh_frequency or "Non définie" }}</span>
+                    <span>Schéma : {{ dashboard.default_schema or "Par défaut" }}</span>
+                    <span>Mise à jour : {{ dashboard.updated_at.strftime("%d/%m/%Y %H:%M") }}</span>
                 </div>
-            </div>
 
-            <div class="hero-right">
-                <div class="hero-stat-card">
-                    <span class="stat-label">Dashboards actifs</span>
-                    <strong class="stat-value">12</strong>
+                <div class="card-footer">
+                    <a href="/dashboard/{{ dashboard.id }}" class="card-link">Ouvrir</a>
+                    <a href="/dashboard/{{ dashboard.id }}/details" class="card-link ghost">Détails</a>
+
+                    <form
+                        method="post"
+                        action="/dashboard/{{ dashboard.id }}/delete"
+                        onsubmit="return confirm('Supprimer ce dashboard ?');"
+                    >
+                        <button type="submit" class="card-link danger">Supprimer</button>
+                    </form>
                 </div>
-                <div class="hero-stat-card">
-                    <span class="stat-label">Dernière mise à jour</span>
-                    <strong class="stat-value">Aujourd’hui</strong>
-                </div>
-                <div class="hero-stat-card">
-                    <span class="stat-label">Espaces partagés</span>
-                    <strong class="stat-value">5 équipes</strong>
-                </div>
-            </div>
-        </section>
+            </article>
+            {% endfor %}
 
-        <section class="filters-bar">
-            <div class="filters-left">
-                <button class="filter-chip active">Tous</button>
-                <button class="filter-chip">Exécutif</button>
-                <button class="filter-chip">Finance</button>
-                <button class="filter-chip">Marketing</button>
-                <button class="filter-chip">Opérations</button>
-                <button class="filter-chip">Produit</button>
-            </div>
+            <a href="/dashboard/new" class="dashboard-card add-dashboard-card">
+                <div class="add-card-icon">+</div>
+                <h4>Ajouter un dashboard</h4>
+                <p>
+                    Créez un nouvel espace analytique, connectez vos sources
+                    et partagez vos indicateurs avec votre équipe.
+                </p>
+                <span class="add-card-action">Créer maintenant</span>
+            </a>
+        </div>
+    </section>
+</main>
 
-            <div class="filters-right">
-                <select class="sort-select">
-                    <option>Trier par : récent</option>
-                    <option>Trier par : nom</option>
-                    <option>Trier par : équipe</option>
-                </select>
-            </div>
-        </section>
-
-        <section class="dashboard-section">
-            <div class="section-header">
-                <div>
-                    <p class="section-kicker">Catalogue analytique</p>
-                    <h3 class="section-title">Liste des dashboards</h3>
-                </div>
-                <a href="#" class="section-link">Voir l’historique</a>
-            </div>
-
-            <div class="dashboard-grid" id="dashboardGrid">
-                <article class="dashboard-card" data-name="Executive Overview">
-                    <div class="card-top">
-                        <span class="card-badge">Exécutif</span>
-                        <span class="card-status online">Actif</span>
-                    </div>
-
-                    <h4>Executive Overview</h4>
-                    <p>
-                        Vue consolidée des KPI stratégiques, performance globale
-                        et indicateurs décisionnels.
-                    </p>
-
-                    <div class="card-meta">
-                        <span>Équipe : Direction</span>
-                        <span>Mise à jour : 2h</span>
-                    </div>
-
-                    <div class="card-footer">
-                        <a href="#" class="card-link">Ouvrir</a>
-                        <a href="#" class="card-link ghost">Détails</a>
-                    </div>
-                </article>
-
-                <article class="dashboard-card" data-name="Sales Performance">
-                    <div class="card-top">
-                        <span class="card-badge">Ventes</span>
-                        <span class="card-status online">Actif</span>
-                    </div>
-
-                    <h4>Sales Performance</h4>
-                    <p>
-                        Suivi du pipeline commercial, chiffre d’affaires,
-                        conversion et objectifs mensuels.
-                    </p>
-
-                    <div class="card-meta">
-                        <span>Équipe : Sales</span>
-                        <span>Mise à jour : 30 min</span>
-                    </div>
-
-                    <div class="card-footer">
-                        <a href="#" class="card-link">Ouvrir</a>
-                        <a href="#" class="card-link ghost">Détails</a>
-                    </div>
-                </article>
-
-                <article class="dashboard-card" data-name="Marketing Insights">
-                    <div class="card-top">
-                        <span class="card-badge">Marketing</span>
-                        <span class="card-status online">Actif</span>
-                    </div>
-
-                    <h4>Marketing Insights</h4>
-                    <p>
-                        Analyse des campagnes, acquisition, ROI,
-                        trafic et contribution par canal.
-                    </p>
-
-                    <div class="card-meta">
-                        <span>Équipe : Marketing</span>
-                        <span>Mise à jour : 1h</span>
-                    </div>
-
-                    <div class="card-footer">
-                        <a href="#" class="card-link">Ouvrir</a>
-                        <a href="#" class="card-link ghost">Détails</a>
-                    </div>
-                </article>
-
-                <article class="dashboard-card" data-name="Operations Control">
-                    <div class="card-top">
-                        <span class="card-badge">Opérations</span>
-                        <span class="card-status online">Actif</span>
-                    </div>
-
-                    <h4>Operations Control</h4>
-                    <p>
-                        Supervision de la performance opérationnelle,
-                        délais, flux et charge des équipes.
-                    </p>
-
-                    <div class="card-meta">
-                        <span>Équipe : Ops</span>
-                        <span>Mise à jour : 4h</span>
-                    </div>
-
-                    <div class="card-footer">
-                        <a href="#" class="card-link">Ouvrir</a>
-                        <a href="#" class="card-link ghost">Détails</a>
-                    </div>
-                </article>
-
-                <article class="dashboard-card" data-name="Finance Monitor">
-                    <div class="card-top">
-                        <span class="card-badge">Finance</span>
-                        <span class="card-status maintenance">Révision</span>
-                    </div>
-
-                    <h4>Finance Monitor</h4>
-                    <p>
-                        Suivi budgétaire, marges, dépenses,
-                        rentabilité et indicateurs financiers clés.
-                    </p>
-
-                    <div class="card-meta">
-                        <span>Équipe : Finance</span>
-                        <span>Mise à jour : Hier</span>
-                    </div>
-
-                    <div class="card-footer">
-                        <a href="#" class="card-link">Ouvrir</a>
-                        <a href="#" class="card-link ghost">Détails</a>
-                    </div>
-                </article>
-
-                <article class="dashboard-card" data-name="Customer Health">
-                    <div class="card-top">
-                        <span class="card-badge">Client</span>
-                        <span class="card-status online">Actif</span>
-                    </div>
-
-                    <h4>Customer Health</h4>
-                    <p>
-                        Vision sur la satisfaction, rétention,
-                        usage produit et signaux de risque client.
-                    </p>
-
-                    <div class="card-meta">
-                        <span>Équipe : Customer Success</span>
-                        <span>Mise à jour : 3h</span>
-                    </div>
-
-                    <div class="card-footer">
-                        <a href="#" class="card-link">Ouvrir</a>
-                        <a href="#" class="card-link ghost">Détails</a>
-                    </div>
-                </article>
-            </div>
-        </section>
-    </main>
-
-    <script src="{{ url_for('static', path='js/Dashboard.js') }}"></script>
+<script src="{{ url_for('static', path='js/Dashboard.js') }}"></script>
 </body>
 </html>

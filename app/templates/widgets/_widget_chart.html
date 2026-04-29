@@ -1,0 +1,54 @@
+<article class="widget-card" data-widget-id="{{ widget.id }}">
+    <div class="widget-header">
+        <div class="widget-header-left">
+            <span class="widget-badge chart-badge">Graphique</span>
+            <div>
+                <h3>{{ widget.title }}</h3>
+                <p>{{ widget.description or "Aucune description renseignée." }}</p>
+            </div>
+        </div>
+
+        <div class="widget-header-right">
+            <button class="icon-action-btn export-csv-btn" data-table-id="chart-widget-{{ widget.id }}">Exporter</button>
+            <button class="icon-action-btn open-widget-modal">Paramétrer</button>
+
+            <form method="post" action="/dashboard/{{ dashboard.id }}/widgets/{{ widget.id }}/delete">
+                <button type="submit" class="icon-action-btn danger-btn">
+                    Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="widget-tools">
+        <div class="widget-search">
+            <input
+                type="text"
+                placeholder="Rechercher dans ce widget..."
+                class="chart-search-input"
+                data-table-id="chart-widget-{{ widget.id }}"
+            />
+        </div>
+
+        <div class="widget-meta">
+            <span>Type : Graphique</span>
+            <span>Source ID : {{ widget.source_id }}</span>
+            <span>Rafraîchissement : {{ widget.refresh_frequency or "Manuel" }}</span>
+        </div>
+    </div>
+
+    {% if widget.cache %}
+        <div
+            class="chart-data"
+            data-chart-id="chart-widget-{{ widget.id }}"
+            data-chart-type="{{ widget.widget_type }}"
+            data-columns='{{ widget.cache.columns | tojson }}'
+            data-rows='{{ widget.cache.rows | tojson }}'
+        ></div>
+
+        <div class="widget-body chart-widget-body">
+            <canvas id="chart-widget-{{ widget.id }}"></canvas>
+        </div>
+    {% else %}
+        <div class="empty-table-message">Aucune donnée disponible.</div>
+    {% endif %}
+</article>

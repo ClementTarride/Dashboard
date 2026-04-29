@@ -80,7 +80,7 @@
                     </div>
                 </div>
 
-                <form action="#" method="post" class="dashboard-form">
+                <form action="/dashboard/new" method="post" class="dashboard-form">
                     <div class="form-grid">
                         <div class="input-group full-width">
                             <label for="dashboard-name">Nom du dashboard</label>
@@ -107,10 +107,11 @@
                             <label for="dashboard-source">Source associée</label>
                             <select id="dashboard-source" name="dashboard_source" required>
                                 <option value="">Sélectionner une source</option>
-                                <option value="postgresql-production">PostgreSQL Production</option>
-                                <option value="postgresql-analytics">PostgreSQL Analytics</option>
-                                <option value="mysql-crm">MySQL CRM</option>
-                                <option value="sqlserver-finance">SQL Server Finance</option>
+                                {% for source in sources %}
+                                    <option value="{{ source.id }}">
+                                        {{ source.name }} — {{ source.db_type }} / {{ source.environment }}
+                                    </option>
+                                {% endfor %}
                             </select>
                         </div>
 
@@ -118,30 +119,27 @@
                             <label for="dashboard-domain">Domaine</label>
                             <select id="dashboard-domain" name="dashboard_domain">
                                 <option value="">Sélectionner</option>
-                                <option value="sales">Sales</option>
-                                <option value="finance">Finance</option>
-                                <option value="marketing">Marketing</option>
-                                <option value="operations">Operations</option>
-                                <option value="product">Produit</option>
-                                <option value="executive">Executive</option>
+                                {% for value, label in domains %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         <div class="input-group">
                             <label for="dashboard-visibility">Visibilité</label>
                             <select id="dashboard-visibility" name="dashboard_visibility">
-                                <option value="private">Privé</option>
-                                <option value="team">Équipe</option>
-                                <option value="company">Entreprise</option>
+                                {% for value, label in visibilities %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         <div class="input-group">
                             <label for="dashboard-status">Statut</label>
                             <select id="dashboard-status" name="dashboard_status">
-                                <option value="draft">Brouillon</option>
-                                <option value="active">Actif</option>
-                                <option value="archived">Archivé</option>
+                                {% for value, label in statuses %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
                             </select>
                         </div>
 

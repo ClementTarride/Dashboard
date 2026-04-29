@@ -18,9 +18,7 @@ async def tables_page(request: Request):
 async def sql_page(request: Request):
     return render(request, "sql.html")
 
-@router.get("/dashboard",response_class=HTMLResponse)
-async def dashboard_page(request: Request):
-    return render(request, "dashboard.html")
+
 
 @router.get("/logout")
 async def logout(request: Request):

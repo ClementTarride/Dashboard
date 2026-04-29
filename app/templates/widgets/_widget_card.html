@@ -1,0 +1,11 @@
+{% if widget.widget_type == "kpi" %}
+    {% include "widgets/_widget_kpi.html" %}
+{% elif widget.widget_type == "chart" or widget.widget_type == "line" or widget.widget_type =="bar" %}
+    {% include "widgets/_widget_chart.html" %}
+{% elif widget.widget_type == "table" %}
+    {% include "widgets/_widget_table.html" %}
+{% elif widget.widget_type == "map" %}
+    {% include "widgets/_widget_map.html" %}
+{% else %}
+    {% include "widgets/_widget_table.html" %}
+{% endif %}

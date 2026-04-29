@@ -1,0 +1,142 @@
+<article class="widget-card" data-widget-id="{{ widget.id }}">
+    <div class="widget-header">
+        <div class="widget-header-left">
+            <span class="widget-badge table-badge">Tableau</span>
+            <div>
+                <h3>{{ widget.title }}</h3>
+                <p>{{ widget.description or "Aucune description renseignée." }}</p>
+            </div>
+        </div>
+
+        <div class="widget-header-right">
+            <button class="icon-action-btn export-csv-btn  data-table-id="table-widget-{{ widget.id }}">Exporter</button>
+            <button class="icon-action-btn open-widget-modal">Paramétrer</button>
+
+            <form method="post" action="/dashboard/{{ dashboard.id }}/widgets/{{ widget.id }}/delete">
+                <button type="submit" class="icon-action-btn danger-btn">
+                    Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="widget-tools">
+        <div class="widget-search">
+            <input
+                type="text"
+                placeholder="Rechercher dans ce widget..."
+                class="table-search-input"
+                data-table-id="table-widget-{{ widget.id }}"
+            />
+        </div>
+
+        <div class="widget-meta">
+            <span>Type : Tableau</span>
+            <span>Source ID : {{ widget.source_id }}</span>
+            <span>Rafraîchissement : {{ widget.refresh_frequency or "Manuel" }}</span>
+        </div>
+    </div>
+
+    {% if widget.cache %}
+        {% set data = widget.cache %}
+
+        <div class="table-widget-scroll">
+            <table class="table-widget excel-table" id="table-widget-{{ widget.id }}">
+                <thead>
+                    <tr>
+                        {% for col in data.columns %}
+                            <th>
+                                <div class="excel-header-content">
+                                    <span class="excel-header-label">{{ col }}</span>
+
+                                    <button
+                                        type="button"
+                                        class="excel-header-btn"
+                                        data-column="{{ loop.index0 }}"
+                                    >
+                                        ▼
+                                    </button>
+
+                                    <div class="excel-filter-menu">
+                                        <div class="excel-menu-section">
+                                            <button type="button" class="excel-menu-item excel-sort-asc">Trier de A à Z</button>
+                                            <button type="button" class="excel-menu-item excel-sort-desc">Trier de Z à A</button>
+                                        </div>
+
+                                        <div class="excel-menu-section">
+                                            <label class="excel-menu-label">Type de donnée</label>
+                                            <select class="excel-data-type excel-menu-select">
+                                                <option value="text">Texte</option>
+                                                <option value="number">Numérique</option>
+                                                <option value="date">Date</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="excel-filter-text-block excel-menu-section">
+                                            <label class="excel-menu-label">Filtre textuel</label>
+                                            <select class="excel-filter-text-operator excel-menu-select">
+                                                <option value="contains">Contient</option>
+                                                <option value="not_contains">Ne contient pas</option>
+                                                <option value="equals">Est égal à</option>
+                                                <option value="not_equals">Est différent de</option>
+                                                <option value="starts_with">Commence par</option>
+                                                <option value="ends_with">Se termine par</option>
+                                            </select>
+                                            <input type="text" class="excel-filter-text-value excel-menu-input" placeholder="Valeur..." />
+                                        </div>
+
+                                        <div class="excel-filter-number-block excel-menu-section hidden">
+                                            <label class="excel-menu-label">Filtre numérique</label>
+                                            <select class="excel-filter-number-operator excel-menu-select">
+                                                <option value="eq">Est égal à</option>
+                                                <option value="neq">Est différent de</option>
+                                                <option value="gt">Supérieur à</option>
+                                                <option value="gte">Supérieur ou égal à</option>
+                                                <option value="lt">Inférieur à</option>
+                                                <option value="lte">Inférieur ou égal à</option>
+                                                <option value="between">Entre</option>
+                                            </select>
+                                            <input type="number" step="any" class="excel-filter-number-value1 excel-menu-input" placeholder="Valeur 1" />
+                                            <input type="number" step="any" class="excel-filter-number-value2 excel-menu-input hidden" placeholder="Valeur 2" />
+                                        </div>
+
+                                        <div class="excel-filter-date-block excel-menu-section hidden">
+                                            <label class="excel-menu-label">Filtre date</label>
+                                            <select class="excel-filter-date-operator excel-menu-select">
+                                                <option value="on">Le</option>
+                                                <option value="before">Avant</option>
+                                                <option value="after">Après</option>
+                                                <option value="between">Entre</option>
+                                            </select>
+                                            <input type="date" class="excel-filter-date-value1 excel-menu-input" />
+                                            <input type="date" class="excel-filter-date-value2 excel-menu-input hidden" />
+                                        </div>
+
+                                        <div class="excel-menu-actions">
+                                            <button type="button" class="btn small excel-apply-filter">Appliquer</button>
+                                            <button type="button" class="btn small excel-clear-filter">Effacer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in data.rows %}
+                        <tr>
+                            {% for col in data.columns %}
+                                <td title="{{ row[col] }}">{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-table-message">
+            Aucune donnée disponible.
+        </div>
+    {% endif %}
+</article>

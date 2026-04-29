@@ -1,0 +1,45 @@
+<article class="widget-card" data-widget-id="{{ widget.id }}">
+    <div class="widget-header">
+        <div class="widget-header-left">
+            <span class="widget-badge">KPI</span>
+            <div>
+                <h3>{{ widget.title }}</h3>
+                <p>{{ widget.description or "Aucune description renseignée." }}</p>
+            </div>
+        </div>
+
+        <div class="widget-header-right">
+            <button class="icon-action-btn">Dupliquer</button>
+            <button class="icon-action-btn open-widget-modal">Paramétrer</button>
+            <form method="post" action="/dashboard/{{ dashboard.id }}/widgets/{{ widget.id }}/delete">
+                <button type="submit" class="icon-action-btn danger-btn">Supprimer</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="widget-tools">
+        <div class="widget-search">
+            <input type="text" placeholder="Rechercher dans ce widget..." />
+        </div>
+        <div class="widget-meta">
+            <span>Type : KPI</span>
+            <span>Source ID : {{ widget.source_id }}</span>
+            <span>Rafraîchissement : {{ widget.refresh_frequency or "Manuel" }}</span>
+        </div>
+    </div>
+
+    <div class="widget-body">
+        <div class="kpi-preview-grid">
+            <div class="kpi-box">
+                <span class="kpi-label">Valeur</span>
+                <strong class="kpi-value">À calculer</strong>
+                <span class="kpi-trend neutral">SQL</span>
+            </div>
+            <div class="kpi-box soft">
+                <span class="kpi-label">Requête</span>
+                <strong class="kpi-value">{{ "Définie" if widget.sql_text else "Aucune" }}</strong>
+                <span class="kpi-trend neutral">KPI</span>
+            </div>
+        </div>
+    </div>
+</article>

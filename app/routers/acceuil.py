@@ -75,7 +75,7 @@ def acceuil(
         {
             "url": "/dashboard",
             "badge": dashboard.status,
-            "title": dashboard.title,
+            "title": dashboard.name,
             "description": dashboard.description or "Dashboard disponible.",
         }
         for dashboard in db_dashboards

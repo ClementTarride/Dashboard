@@ -511,3 +511,71 @@ body {
         align-items: flex-start;
     }
 }
+.card-footer form {
+    margin: 0;
+}
+
+.card-link.danger {
+    border: none;
+    cursor: pointer;
+    background: rgba(220, 38, 38, 0.12);
+    color: var(--danger);
+    border: 1px solid rgba(220, 38, 38, 0.22);
+}
+
+.card-link.danger:hover {
+    background: rgba(220, 38, 38, 0.18);
+}
+
+.add-dashboard-card {
+    text-decoration: none;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    border: 1.5px dashed rgba(79, 70, 229, 0.35);
+    background:
+        linear-gradient(135deg, rgba(238, 242, 255, 0.96), rgba(255, 255, 255, 0.94));
+}
+
+.add-dashboard-card:hover {
+    border-color: var(--primary);
+}
+
+.add-card-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    box-shadow: 0 14px 30px rgba(79, 70, 229, 0.28);
+}
+
+.add-card-action {
+    margin-top: 20px;
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    color: var(--primary);
+    background: var(--primary-soft);
+}
+
+.table-widget tbody tr:nth-child(odd) td {
+    background: #ffffff;
+}
+
+.table-widget tbody tr:nth-child(even) td {
+    background: #f8fafc;
+}
+
+.table-widget tbody tr:hover td {
+    background: #eef2ff;
+}

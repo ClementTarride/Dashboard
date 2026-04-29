@@ -12,3 +12,4 @@ env/
 /private.key
 
 /app/config.py
+/jeu_de_donnee
