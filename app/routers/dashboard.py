@@ -282,6 +282,185 @@ def create_widget(
         status_code=303,
     )
 
+@router.post("/dashboard/{dashboard_id}/widgets/{widget_id}/delete")
+def delete_widget(
+    dashboard_id: int,
+    widget_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    dashboard = (
+        db.query(CatalogDashboards)
+        .filter(
+            CatalogDashboards.id == dashboard_id,
+            CatalogDashboards.owner_id == current_user.id
+        )
+        .first()
+    )
+
+    if not dashboard:
+        raise HTTPException(status_code=404, detail="Dashboard introuvable")
+
+    widget = (
+        db.query(CatalogWidgets)
+        .filter(
+            CatalogWidgets.id == widget_id,
+            CatalogWidgets.dashboard_id == dashboard_id
+        )
+        .first()
+    )
+
+    if not widget:
+        raise HTTPException(status_code=404, detail="Widget introuvable")
+
+    db.query(CatalogWidgetResultsCache).filter(
+        CatalogWidgetResultsCache.widget_id == widget.id
+    ).delete()
+
+    db.delete(widget)
+    db.commit()
+
+    return RedirectResponse(
+        url=f"/dashboard/{dashboard_id}",
+        status_code=303
+    )
+
+@router.get("/dashboard/{dashboard_id}/widgets/{widget_id}/settings")
+def get_widget_settings(
+    dashboard_id: int,
+    widget_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    dashboard = (
+        db.query(CatalogDashboards)
+        .filter(
+            CatalogDashboards.id == dashboard_id,
+            CatalogDashboards.owner_id == current_user.id
+        )
+        .first()
+    )
+
+    if not dashboard:
+        raise HTTPException(status_code=404, detail="Dashboard introuvable")
+
+    widget = (
+        db.query(CatalogWidgets)
+        .filter(
+            CatalogWidgets.id == widget_id,
+            CatalogWidgets.dashboard_id == dashboard_id
+        )
+        .first()
+    )
+
+    if not widget:
+        raise HTTPException(status_code=404, detail="Widget introuvable")
+
+    return {
+        "id": widget.id,
+        "title": widget.title,
+        "description": widget.description,
+        "widget_type": widget.widget_type,
+        "sql_text": widget.sql_text,
+        "refresh_frequency": widget.refresh_frequency,
+        "source_id": widget.source_id,
+    }
+
+@router.post("/dashboard/{dashboard_id}/widgets/{widget_id}/settings")
+def update_widget_settings(
+    dashboard_id: int,
+    widget_id: int,
+    title: str = Form(...),
+    description: str = Form(None),
+    widget_type: str = Form(...),
+    sql_text: str = Form(None),
+    refresh_frequency: str = Form(None),
+    source_id: int = Form(...),
+    chart_type: str = Form(None),
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
+    dashboard = (
+        db.query(CatalogDashboards)
+        .filter(
+            CatalogDashboards.id == dashboard_id,
+            CatalogDashboards.owner_id == current_user.id
+        )
+        .first()
+    )
+
+    if not dashboard:
+        raise HTTPException(status_code=404, detail="Dashboard introuvable")
+
+    widget = (
+        db.query(CatalogWidgets)
+        .filter(
+            CatalogWidgets.id == widget_id,
+            CatalogWidgets.dashboard_id == dashboard_id
+        )
+        .first()
+    )
+
+    if not widget:
+        raise HTTPException(status_code=404, detail="Widget introuvable")
+
+    element = widget_type
+    if widget_type == "chart":
+        element = chart_type
+
+    widget.title = title
+    widget.description = description
+    widget.sql_text = sql_text
+    widget.refresh_frequency = refresh_frequency
+    widget.source_id = source_id
+    widget.widget_type = element
+    widget.updated_at = datetime.now()
+
+    source = (
+        db.query(CatalogSources)
+        .filter(CatalogSources.id == source_id)
+        .first()
+    )
+
+    if not source:
+        raise HTTPException(status_code=404, detail="Source introuvable")
+
+    if sql_text:
+        success, result = db_query_executer(
+            db_type=source.db_type,
+            username=source.username,
+            password=source.password_secret_ref,
+            host=source.host,
+            port=source.port,
+            database_name=source.database_name,
+            sql_query=sql_text
+        )
+
+        if not success:
+            db.rollback()
+            raise HTTPException(
+                status_code=400,
+                detail=f"Erreur SQL : {result}"
+            )
+
+        db.query(CatalogWidgetResultsCache).filter(
+            CatalogWidgetResultsCache.widget_id == widget.id
+        ).delete()
+
+        cache = CatalogWidgetResultsCache(
+            widget_id=widget.id,
+            payload_json=json.dumps(result),
+            generated_at=datetime.now()
+        )
+
+        db.add(cache)
+
+    db.commit()
+
+    return RedirectResponse(
+        url=f"/dashboard/{dashboard_id}",
+        status_code=303
+    )
 # Exemple si tu veux réactiver l'édition
 # @router.get("/{dashboard_id}/edit", response_class=HTMLResponse)
 # async def edit_dashboard_page(request: Request, dashboard_id: int):

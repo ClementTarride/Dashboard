@@ -51,7 +51,7 @@
                 </p>
 
                 <div class="hero-actions">
-                    <button type="button" class="primary-btn open-widget-modal">
+                    <button type="button" class="primary-btn open-widget-modal" data-mode="create">
                         Ajouter un widget
                     </button>
                     <a href="#" class="secondary-btn">Prévisualiser le dashboard</a>
@@ -106,7 +106,7 @@
                 <button class="close-modal-btn" id="closeWidgetModal">&times;</button>
             </div>
 
-        <form class="widget-form" action="/dashboard/{{ dashboard.id }}/widgets" method="post">
+        <form id="widgetForm" class="widget-form" action="/dashboard/{{ dashboard.id }}/widgets" method="post">
             <input type="hidden" name="source_id" value="{{ source_id }}">
 
             <div class="modal-grid">
@@ -187,12 +187,14 @@
 
             <div class="modal-actions">
                 <button type="button" class="secondary-btn">Tester la requête</button>
-                <button type="submit" class="primary-btn">Enregistrer</button>
+                <button type="submit" class="primary-btn" id="widgetSubmitBtn">Enregistrer</button>
             </div>
         </form>
         </div>
     </div>
-
+    <script>
+        window.dashboardId = "{{ dashboard.id }}";
+    </script>
     <script src="{{ url_for('static', path='js/dashboard_widgets.js') }}"></script>
 </body>
 </html>

@@ -9,10 +9,10 @@
         </div>
 
         <div class="widget-header-right">
-            <button class="icon-action-btn export-csv-btn  data-table-id="table-widget-{{ widget.id }}">Exporter</button>
-            <button class="icon-action-btn open-widget-modal">Paramétrer</button>
-
-            <form method="post" action="/dashboard/{{ dashboard.id }}/widgets/{{ widget.id }}/delete">
+            <button class="icon-action-btn export-csv-btn" data-table-id="table-widget-{{ widget.id }}">Exporter</button>
+            <button type="button" class="icon-action-btn open-widget-modal" data-mode="edit" data-widget-id="{{ widget.id }}" data-dashboard-id="{{ dashboard.id }}">Paramétrer</button>
+            
+            <form method="post" action="/dashboard/{{ dashboard.id }}/widgets/{{ widget.id }}/delete" onsubmit="return confirm('Supprimer ce widget ?');">
                 <button type="submit" class="icon-action-btn danger-btn">
                     Supprimer
                 </button>

@@ -32,7 +32,7 @@ class CatalogTeamMembers(Base):
 
     team_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    role_id = Column(Integer, ForeignKey("roles.id"), nullable=False)
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable=True)
     joined_at = Column(DATETIME, nullable=False)
 
     __table_args__ = (

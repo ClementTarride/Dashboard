@@ -1,6 +1,6 @@
 {% if widget.widget_type == "kpi" %}
     {% include "widgets/_widget_kpi.html" %}
-{% elif widget.widget_type == "chart" or widget.widget_type == "line" or widget.widget_type =="bar" %}
+{% elif widget.widget_type == "chart" or widget.widget_type == "line" or widget.widget_type =="bar" or widget.widget_type =="radar" or widget.widget_type =="pie" or widget.widget_type =="doughnut" or widget.widget_type =="polarArea" %}
     {% include "widgets/_widget_chart.html" %}
 {% elif widget.widget_type == "table" %}
     {% include "widgets/_widget_table.html" %}

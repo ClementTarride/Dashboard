@@ -28,3 +28,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+const userModal = document.getElementById('userModal');
+
+function openUserModal() {
+    userModal.classList.add('open');
+}
+
+function closeUserModal() {
+    userModal.classList.remove('open');
+}
+
+document.querySelector('[data-open-user-modal]')?.addEventListener('click', () => {
+    document.getElementById('userModalTitle').textContent = 'Inviter un utilisateur';
+    document.getElementById('user_id').value = '';
+    document.getElementById('full_name').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('status').value = 'active';
+    document.getElementById('avatar_url').value = '';
+
+    openUserModal();
+});
+
+document.querySelectorAll('[data-close-user-modal]').forEach((btn) => {
+    btn.addEventListener('click', closeUserModal);
+});
+
+document.querySelectorAll('[data-edit-user]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+        document.getElementById('userModalTitle').textContent = 'Modifier un utilisateur';
+        document.getElementById('user_id').value = btn.dataset.id;
+        document.getElementById('full_name').value = btn.dataset.name;
+        document.getElementById('email').value = btn.dataset.email;
+        document.getElementById('password').value = '';
+        document.getElementById('status').value = btn.dataset.status;
+        document.getElementById('avatar_url').value = btn.dataset.avatar;
+
+        openUserModal();
+    });
+});

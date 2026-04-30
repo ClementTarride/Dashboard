@@ -1,1 +1,1 @@
-from . import acceuil, auth, dashboard, sources, tables, header
+from . import acceuil, auth, dashboard, sources, tables, header, profile, utilisateur,teams

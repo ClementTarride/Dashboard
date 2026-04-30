@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Équipes - Data Platform</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/teams.css') }}">
 </head>
 <body>
     <header class="topbar">
@@ -32,14 +32,141 @@
         </div>
     </header>
     <main class="page-content">
-        <section class="hero"><div class="hero-left"><span class="eyebrow">Team Center</span><h2>Structurez les accès par équipe métier ou technique</h2><p>Associez les dashboards, sources et membres aux équipes pour éviter les accès dispersés utilisateur par utilisateur.</p><div class="hero-actions"><a href="/teams/new" class="primary-btn">Créer une équipe</a><a href="/sharing" class="secondary-btn">Gérer les partages</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Équipes</span><strong class="stat-value">8</strong></div><div class="hero-stat-card"><span class="stat-label">Dashboards partagés</span><strong class="stat-value">18</strong></div><div class="hero-stat-card"><span class="stat-label">Sources restreintes</span><strong class="stat-value">6</strong></div></div></section>
-        <section class="filters-bar"><div class="filters-left"><button class="filter-chip active">Toutes</button><button class="filter-chip">Métier</button><button class="filter-chip">Technique</button><button class="filter-chip">Restreinte</button></div><select class="sort-select"><option>Trier par : membres</option><option>Trier par : nom</option></select></section>
-        <section><div class="section-header"><div><p class="section-kicker">Organisation</p><h3 class="section-title">Équipes</h3></div><a href="/users" class="section-link">Voir les utilisateurs</a></div><div class="card-grid">
-            <article class="app-card" data-search-card="direction executif"><div class="card-top"><span class="card-badge">Métier</span><span class="status-pill success">Actif</span></div><h4>Direction</h4><p>Accès aux dashboards exécutifs, KPI stratégiques et synthèses consolidées.</p><div class="card-meta"><span>6 membres</span><span>5 dashboards · 2 sources</span></div><div class="card-footer"><a class="card-link" href="/teams/1">Ouvrir</a><a class="card-link ghost" href="/sharing">Accès</a></div></article>
-            <article class="app-card" data-search-card="data engineering"><div class="card-top"><span class="card-badge">Technique</span><span class="status-pill success">Actif</span></div><h4>Data Engineering</h4><p>Responsable des sources, modèles SQL, refreshs, tests de connexion et qualité des données.</p><div class="card-meta"><span>4 membres</span><span>12 sources · 9 modèles</span></div><div class="card-footer"><a class="card-link" href="/teams/2">Ouvrir</a><a class="card-link ghost" href="/sharing">Accès</a></div></article>
-            <article class="app-card" data-search-card="finance restreinte"><div class="card-top"><span class="card-badge">Restreinte</span><span class="status-pill warning">Contrôle</span></div><h4>Finance</h4><p>Dashboards financiers, budgets, marges et sources sensibles avec permissions renforcées.</p><div class="card-meta"><span>5 membres</span><span>4 dashboards · 3 sources</span></div><div class="card-footer"><a class="card-link" href="/teams/3">Ouvrir</a><a class="card-link ghost" href="/sharing">Accès</a></div></article>
-        </div></section>
+        <section class="hero">
+            <div class="hero-left">
+                <span class="eyebrow">Team Center</span>
+                <h2>Structurez les accès par équipe métier ou technique</h2>
+                <p>Associez les dashboards, sources et membres aux équipes pour éviter les accès dispersés utilisateur par utilisateur.</p>
+                <div class="hero-actions">
+                    <button class="primary-btn" type="button" data-open-modal="createTeamModal">
+                        Créer une équipe
+                    </button>
+                    <a href="/sharing" class="secondary-btn">Gérer les partages</a>
+                </div>
+            </div><div class="hero-right">
+                <div class="hero-stat-card">
+                    <span class="stat-label">Équipes</span>
+                    <strong class="stat-value">8</strong>
+                </div><div class="hero-stat-card">
+                    <span class="stat-label">Dashboards partagés</span>
+                    <strong class="stat-value">18</strong>
+                </div>
+                <div class="hero-stat-card">
+                    <span class="stat-label">Sources restreintes</span>
+                    <strong class="stat-value">6</strong>
+                </div>
+            </div>
+        </section>
+        <section class="filters-bar"><div class="filters-left">
+            <button class="filter-chip active">Toutes</button>
+            <button class="filter-chip">Métier</button>
+            <button class="filter-chip">Technique</button>
+            <button class="filter-chip">Restreinte</button>
+        </div>
+        <select class="sort-select">
+            <option>Trier par : membres</option>
+            <option>Trier par : nom</option>
+        </select>
+    </section>
+        <section>
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker">Organisation</p>
+                    <h3 class="section-title">Équipes</h3>
+                </div><a href="/users" class="section-link">Voir les utilisateurs</a>
+            </div>
+            <div class="card-grid">
+                {% for team in teams %}
+                <article class="app-card" data-search-card="{{ team.name }} {{ team.type }}">
+                    <div class="card-top">
+                        <span class="card-badge">
+                            {% if team.type == "business" %}Métier
+                            {% elif team.type == "technical" %}Technique
+                            {% elif team.type == "restricted" %}Restreinte
+                            {% else %}Autre{% endif %}
+                        </span>
+
+                        <span class="status-pill success">
+                            {{ team.status }}
+                        </span>
+                    </div>
+
+                    <h4>{{ team.name }}</h4>
+                    <p>{{ team.description or "Aucune description." }}</p>
+                    <h4>Membres actuels</h4>
+
+                    {% for item in members_by_team.get(team.id, []) %}
+                    <div class="member-row">
+                        <span>
+                            {{ item.user.full_name }} — {{ item.role.name }}
+                        </span>
+
+                        <form method="post" action="/teams/{{ team.id }}/members/{{ item.user.id }}/remove">
+                            <button type="submit" class="card-link ghost">Retirer</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <p>Aucun membre dans cette équipe.</p>
+                    {% endfor %}
+                    <div class="card-meta">
+                        <span>9 membre(s)</span>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="card-link" type="button" data-open-modal="teamModal{{ team.id }}">
+                            Ouvrir
+                        </button>
+                        <a class="card-link ghost" href="/sharing">Accès</a>
+                    </div>
+                </article>
+
+                <div class="modal" id="teamModal{{ team.id }}">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>{{ team.name }}</h3>
+                            <button type="button" class="modal-close" data-close-modal>&times;</button>
+                        </div>
+
+                        <p>{{ team.description or "Aucune description." }}</p>
+
+                        <h4>Ajouter une personne</h4>
+
+                        <form method="post" action="/teams/{{ team.id }}/members/add" class="modal-form">
+                            <select name="user_ids" multiple size="5" required>
+                                {% for user in users %}
+                                <option value="{{ user.id }}">{{ user.full_name }} — {{ user.email }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="primary-btn" type="submit">Ajouter</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
     </main>
-    <script src="{{ url_for('static', path='js/admin.js') }}"></script>
+    <div class="modal" id="createTeamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Créer une équipe</h3>
+                <button type="button" class="modal-close" data-close-modal>&times;</button>
+            </div>
+
+            <form method="post" action="/teams/create" class="modal-form">
+                <input type="text" name="name" placeholder="Nom de l'équipe" required>
+
+                <select name="type" required>
+                    <option value="business">Métier</option>
+                    <option value="technical">Technique</option>
+                    <option value="restricted">Restreinte</option>
+                </select>
+
+                <textarea name="description" placeholder="Description"></textarea>
+
+                <button class="primary-btn" type="submit">Créer</button>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', path='js/teams.js') }}"></script>
 </body>
 </html>

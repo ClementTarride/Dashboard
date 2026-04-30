@@ -1,7 +1,50 @@
 const widgetModal = document.getElementById("widgetModal");
 const openWidgetModalButtons = document.querySelectorAll(".open-widget-modal");
 const closeWidgetModalButton = document.getElementById("closeWidgetModal");
+const widgetForm = document.getElementById("widgetForm");
+const widgetSubmitBtn = document.getElementById("widgetSubmitBtn");
 
+function resetWidgetForm() {
+    widgetForm.reset();
+
+    widgetForm.action = `/dashboard/${window.dashboardId}/widgets`;
+
+    document.querySelector(".section-title").textContent = "Paramétrer un widget";
+    widgetSubmitBtn.textContent = "Enregistrer";
+}
+async function openWidgetModalHandler(event) {
+    const button = event.currentTarget;
+    const mode = button.dataset.mode || "create";
+
+    resetWidgetForm();
+
+    if (mode === "edit") {
+        const dashboardId = button.dataset.dashboardId;
+        const widgetId = button.dataset.widgetId;
+
+        const response = await fetch(`/dashboard/${dashboardId}/widgets/${widgetId}/settings`);
+
+        if (!response.ok) {
+            alert("Impossible de récupérer les paramètres du widget.");
+            return;
+        }
+
+        const widget = await response.json();
+
+        document.getElementById("title").value = widget.title || "";
+        document.getElementById("widget_type").value = widget.widget_type || "";
+        document.getElementById("sql_text").value = widget.sql_text || "";
+        document.getElementById("refresh_frequency").value = widget.refresh_frequency || "manual";
+        document.getElementById("description").value = widget.description || "";
+
+        widgetForm.action = `/dashboard/${dashboardId}/widgets/${widgetId}/settings`;
+
+        document.querySelector(".section-title").textContent = "Modifier le widget";
+        widgetSubmitBtn.textContent = "Mettre à jour";
+    }
+
+    openWidgetModal();
+}
 function openWidgetModal() {
     if (!widgetModal) return;
     widgetModal.classList.add("active");
@@ -15,7 +58,7 @@ function closeWidgetModal() {
 }
 
 openWidgetModalButtons.forEach((button) => {
-    button.addEventListener("click", openWidgetModal);
+    button.addEventListener("click", openWidgetModalHandler);
 });
 
 if (closeWidgetModalButton) {

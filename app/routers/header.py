@@ -27,19 +27,6 @@ async def logout(request: Request):
 @router.get("/model",response_class=HTMLResponse)
 async def sources(request: Request):
     return render(request, "model.html")
-
-@router.get("/users",response_class=HTMLResponse)
-async def users(request: Request):
-    return render(request, "users.html")
-
-@router.get("/teams",response_class=HTMLResponse)
-async def teams(request: Request):
-    return render(request, "teams.html")
-
-@router.get("/profile",response_class=HTMLResponse)
-async def profile(request: Request):
-    return render(request, "profile.html")
-
 @router.get("/roles",response_class=HTMLResponse)
 async def users_role(request: Request):
     return render(request, "roles.html")

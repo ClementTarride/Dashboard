@@ -32,8 +32,88 @@
         </div>
     </header>
     <main class="page-content">
-        <section class="hero"><div class="hero-left"><span class="eyebrow">Mon profil</span><h2>Personnalisez votre identité et vos préférences</h2><p>Modifiez votre avatar, vos informations personnelles, votre thème et vos préférences de notifications.</p><div class="hero-actions"><button class="primary-btn">Enregistrer</button><a href="/notifications" class="secondary-btn">Notifications</a></div></div><div class="hero-right"><div class="hero-stat-card"><span class="stat-label">Rôle</span><strong class="stat-value">Admin</strong></div><div class="hero-stat-card"><span class="stat-label">Équipe principale</span><strong class="stat-value">Direction</strong></div><div class="hero-stat-card"><span class="stat-label">Dernière connexion</span><strong class="stat-value">Aujourd’hui</strong></div></div></section>
-        <section class="split-layout"><div class="form-card"><div class="identity" style="margin-bottom:22px"><div class="avatar large">CM</div><div><h3>Claire Martin</h3><p class="muted">claire@dataplatform.local</p></div></div><div class="form-grid"><div class="field"><label>Nom complet</label><input value="Claire Martin"></div><div class="field"><label>Email</label><input value="claire@dataplatform.local"></div><div class="field"><label>Avatar</label><input type="file" accept="image/*"></div><div class="field"><label>Timezone</label><select><option>Europe/Paris</option><option>UTC</option></select></div><div class="field"><label>Thème</label><select><option>Système</option><option>Dark</option><option>Light</option></select></div><div class="field"><label>Langue</label><select><option>Français</option><option>English</option></select></div></div><div class="form-actions"><button class="card-link">Sauvegarder</button><button class="card-link ghost">Réinitialiser</button></div></div>
+        <section class="hero">
+            <div class="hero-left">
+                <span class="eyebrow">Mon profil</span>
+                <h2>Personnalisez votre identité et vos préférences</h2>
+                <p>Modifiez votre avatar, vos informations personnelles, votre thème et vos préférences de notifications.</p>
+                <div class="hero-actions">
+                    <button class="primary-btn">Enregistrer</button>
+                    <a href="/notifications" class="secondary-btn">Notifications</a>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-stat-card">
+                    <span class="stat-label">Rôle</span>
+                    <strong class="stat-value">Admin</strong>
+                </div><div class="hero-stat-card">
+                    <span class="stat-label">Équipe principale</span>
+                    <strong class="stat-value">Direction</strong>
+                </div><div class="hero-stat-card">
+                    <span class="stat-label">Dernière connexion</span>
+                    <strong class="stat-value">Aujourd’hui</strong>
+                </div>
+            </div>
+        </section>
+        <section class="split-layout">
+            <form method="post" action="/profile" enctype="multipart/form-data">
+                <div class="identity" style="margin-bottom:22px">
+                    <div class="avatar large">
+                        {{ user.full_name[:1] }}{{ user.full_name.split(' ')[1][:1] if ' ' in user.full_name else '' }}
+                    </div>
+                    <div>
+                        <h3>{{ user.full_name }}</h3>
+                        <p class="muted">{{ user.email }}</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label>Nom complet</label>
+                        <input name="full_name" value="{{ user.full_name }}" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Email</label>
+                        <input name="email" type="email" value="{{ user.email }}" required>
+                    </div>
+
+                    <div class="field">
+                        <label>Avatar</label>
+                        <input name="avatar" type="file" accept="image/*">
+                    </div>
+
+                    <div class="field">
+                        <label>Timezone</label>
+                        <select name="timezone">
+                            <option value="Europe/Paris" {% if user_pref and user_pref.timezone == "Europe/Paris" %}selected{% endif %}>Europe/Paris</option>
+                            <option value="UTC" {% if user_pref and user_pref.timezone == "UTC" %}selected{% endif %}>UTC</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Thème</label>
+                        <select name="theme">
+                            <option value="system" {% if user_pref and user_pref.theme == "system" %}selected{% endif %}>Système</option>
+                            <option value="dark" {% if user_pref and user_pref.theme == "dark" %}selected{% endif %}>Dark</option>
+                            <option value="light" {% if user_pref and user_pref.theme == "light" %}selected{% endif %}>Light</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Langue</label>
+                        <select name="language">
+                            <option value="fr" {% if user_pref and user_pref.language == "fr" %}selected{% endif %}>Français</option>
+                            <option value="en" {% if user_pref and user_pref.language == "en" %}selected{% endif %}>English</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="card-link">Sauvegarder</button>
+                    <a href="/profile" class="card-link ghost">Réinitialiser</a>
+                </div>
+            </form>
         <div class="form-card"><h3>Préférences de sécurité</h3><div class="permission-list" style="margin-top:18px"><div class="list-item"><strong>Mot de passe</strong><p>Dernière modification il y a 32 jours.</p></div><div class="list-item"><strong>Sessions actives</strong><p>2 sessions connectées. Pensez à les révoquer si besoin.</p></div><div class="list-item"><strong>Notifications email</strong><p>Activées pour les erreurs de refresh, partages et invitations.</p></div></div></div></section>
     </main>
     <script src="{{ url_for('static', path='js/admin.js') }}"></script>
